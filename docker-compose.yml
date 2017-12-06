@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  php-wallet:
+    image: pushkar8723/php-wallet
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - 80:80
+
+  aeon-docker:
+    image: pushkar8723/aeon-docker
+    ports:
+      - 11191:11191
