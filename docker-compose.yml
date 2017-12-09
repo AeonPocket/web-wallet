@@ -6,9 +6,21 @@ services:
     volumes:
       - ./src:/var/www/html
     ports:
-      - 80:80
+      - 80:8000
+    depends_on:
+      - mongo
+      - aeon-docker
+      - redis
 
   aeon-docker:
     image: pushkar8723/aeon-docker
-    ports:
-      - 11191:11191
+
+  redis:
+    image: redis
+
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=aeon
+      - MONGO_INITDB_ROOT_PASSWORD=P@ssword1
+      - MONGO_INITDB_DATABASE=aeon

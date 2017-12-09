@@ -9,6 +9,12 @@
 namespace App\Services;
 
 
+use App\Http\Objects\GetBalanceRequest;
+use App\Http\Objects\GetTransactionsRequests;
+use App\Http\Objects\RefreshRequest;
+use App\Http\Objects\SetWalletRequest;
+use App\Http\Objects\TransferRequest;
+
 class RPCService
 {
     private $httpService;
@@ -17,9 +23,27 @@ class RPCService
         $this->httpService = new HTTPService();
     }
 
-    public function setWallet(string $seed) {
-        $request = new \stdClass();
-        $request->seed = $seed;
+    public function setWallet(SetWalletRequest $request) {
+        return $this->httpService->request('set_wallet', $request);
+    }
+
+    public function createWallet() {
+        return $this->httpService->request('create_wallet', null);
+    }
+
+    public function getBalance(GetBalanceRequest $request) {
+        return $this->httpService->request('set_wallet', $request);
+    }
+
+    public function getTransactions(GetTransactionsRequests $request) {
+        return $this->httpService->request('set_wallet', $request);
+    }
+
+    public function transfer(TransferRequest $request) {
+        return $this->httpService->request('set_wallet', $request);
+    }
+
+    public function refresh(RefreshRequest $request) {
         return $this->httpService->request('set_wallet', $request);
     }
 }

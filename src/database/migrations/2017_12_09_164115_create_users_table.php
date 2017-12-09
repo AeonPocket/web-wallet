@@ -13,13 +13,14 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+        Schema::connection($this->connection)->create('files', function (Blueprint $collection) {
+            $collection->uuid('id');
+            $collection->string('walletAddress');
+            $collection->string('transfers');
+            $collection->integer('bcHeight');
+            $collection->timestamp('accountCreationTime');
+            $collection->timestamps();
+            $collection->index(['id', 'walletAddress']);
         });
     }
 
