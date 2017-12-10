@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateWalletsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::connection($this->connection)->create('files', function (Blueprint $collection) {
-            $collection->uuid('id');
-            $collection->string('walletAddress');
+        Schema::connection($this->connection)->create('wallets', function (Blueprint $collection) {
+            $collection->increments('id');
+            $collection->timestamps();
+            $collection->string('address');
             $collection->string('transfers');
             $collection->integer('bcHeight');
-            $collection->timestamp('accountCreationTime');
+            $collection->timestamp('createTime');
             $collection->timestamps();
-            $collection->index(['id', 'walletAddress']);
+            $collection->index(['id', 'address']);
         });
     }
 
@@ -31,6 +32,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('wallets');
     }
 }
