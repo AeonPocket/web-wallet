@@ -11,14 +11,13 @@ namespace App\Services;
 
 use App\DALs\WalletDAL;
 use App\Http\Objects\GetBalanceRequest;
+use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Utils\error;
-use Hamcrest\Core\Set;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use stdClass;
 
 class WalletService
 {
@@ -98,5 +97,23 @@ class WalletService
             Session::get('seed'), $wallet->createTime, $wallet->bcHeight, $wallet->transfers
         ));
         return $res['balance'];
+    }
+
+
+    public function refresh() {
+        $wallet = WalletDAL::getWallet(Session::get('address'));
+        $result = new stdClass();
+        $result->refreshedOn = time();
+        $req = new RefreshRequest();
+        $req->local_bc_height = $wallet->getAttribute('bcHeight');
+        $req->transfers = $wallet->getAttribute('transfers');
+        $req->account_create_time = $wallet->getAttribute('createTime');
+        $req->seed = Session::get('seed');
+        $res = $this->rpcService->refresh($req);
+        //We update the DB with the new values local_bc_height,transfers,createTime
+        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $result->refreshedOn, $res['transfers']);
+        $result->balance = $res['balance'];
+        $result->currentHeight = $res['local_bc_height'];
+        return $result;
     }
 }

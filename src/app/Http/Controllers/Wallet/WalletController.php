@@ -28,4 +28,7 @@ class WalletController extends Controller
         return response()->json($res);
     }
 
+    public function refresh() {
+        return response()->json($this->walletService->refresh());
+    }
 }

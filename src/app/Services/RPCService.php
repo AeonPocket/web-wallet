@@ -44,6 +44,6 @@ class RPCService
     }
 
     public function refresh(RefreshRequest $request) {
-        return $this->httpService->request('set_wallet', $request);
+        return $this->httpService->request('refresh', $request);
     }
 }
