@@ -26,3 +26,4 @@ services:
       - MONGO_INITDB_DATABASE=aeon
     ports:
       - 27017:27017
+      

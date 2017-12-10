@@ -4,6 +4,10 @@ angular.module('aeonPocket').controller('walletCtrl', [
 
         $scope.wallet = {};
 
+        $scope.setWalletParam = function (key, value) {
+            $scope.wallet[key] = value;
+        }
+
         $scope.toggleSideNav = function() {
             $mdSidenav('left').toggle();
         }
@@ -22,9 +26,6 @@ angular.module('aeonPocket').controller('walletCtrl', [
 
         $scope.init = function () {
             $scope.wallet.address = localStorage.getItem('address');
-            walletService.getBalance().then(function(data) {
-                $scope.wallet.balance = data.balance;
-            });
         }
 
         $scope.init();

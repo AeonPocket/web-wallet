@@ -21,12 +21,12 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
 
         Route::group(['middleware' => 'open'], function(){
             Route::post('login', 'UserController@login');
-            Route::post('create', 'WalletController@create');
         });
 
         Route::group(['middleware' => ['authentication']], function (){
             Route::get('logout', 'UserController@logout');
             Route::get('/', 'UserController@getAccount');
+            Route::post('create', 'WalletController@create');
         });
     });
 
@@ -34,11 +34,15 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
     Route::group(['prefix' => 'wallet', 'namespace'=>'Wallet'], function(){
         Route::group(['middleware' => ['authentication']], function (){
             Route::get('balance','WalletController@getBalance');
-            Route::get('refresh','WalletController@refresh');
+            Route::post('refresh','WalletController@refresh');
             Route::get('seed','WalletController@getSeed');
             Route::get('keys','WalletController@getKeys');
             Route::get('transactions','WalletController@getIncomingTransfers');
             Route::post('transfer','WalletController@transferFunds');
+        });
+
+        Route::group(['middleware' => ['open']], function (){
+            Route::post('create', 'WalletController@create');
         });
     });
 

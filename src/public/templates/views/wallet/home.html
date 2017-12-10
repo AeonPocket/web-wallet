@@ -4,7 +4,7 @@
     </md-button>
     <strong flex md-truncate>Home</strong>
     <div flex></div>
-    <md-button class="md-icon-button">
+    <md-button ng-disabled="inProgress" class="md-icon-button" ng-click="refresh()">
         <i class="material-icons">refresh</i>
         <md-tooltip>Sync Wallet</md-tooltip>
     </md-button>
@@ -40,10 +40,28 @@
         <div class="header">
             <strong>Transactions</strong>
         </div>
-        <div flex layout="column">
+        <div flex layout="column" style="padding: 0;">
             <div ng-if="errorMessage" flex layout="column" layout-align="center center">
                 <p style="color: #555; text-transform: uppercase;">{{errorMessage}}</p>
             </div>
+            <div>
+
+            </div>
+            <md-virtual-repeat-container flex>
+                <div class="tx-list" ng-class="transaction.spent?'outgoing':'incoming'" md-item-size="75" md-virtual-repeat="transaction in transactions" layout="row">
+                    <div>
+                        <i class="material-icons tx-icon" ng-if="!transaction.spent">file_download</i>
+                        <i class="material-icons tx-icon" ng-if="transaction.spent">file_upload</i>
+                    </div>
+                    <div flex>
+                        <p style="word-break: break-all; font-weight: bold;">
+                            <a target="_blank" href="https://chainradar.com/aeon/transaction/{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}">{{transaction.tx_hash}}</a>
+                        </p>
+                        <p class="amount">{{transaction.amount.toFixed(12)}}</p>
+                        <p>{{transaction.global_index}}</p>
+                    </div>
+                </div>
+            </md-virtual-repeat-container>
         </div>
     </md-card>
 </div>

@@ -35,6 +35,11 @@ a {
     margin-right: 10px;
 }
 
+.help-text {
+    font-size: 11px;
+    color: #b2b2b2;
+}
+
 /*********** LOGIN PAGE *************/
 .loginBox {
     width: 500px;
@@ -64,6 +69,21 @@ a {
 
 md-toolbar {
     padding: 0 10px;
+}
+
+/*--------------------- Register Page -----------------------*/
+
+.hero-button {
+    color: #555 !important;
+}
+
+.hero-button:hover {
+    background-color: #16444f !important;
+    color: #fff !important;
+}
+
+.large-icon {
+    font-size: 128px;
 }
 
 /* --------------------- wallet page --------------------- */
@@ -97,4 +117,34 @@ md-card > div {
     font-size: 36px;
     margin-right: 10px;
     color: #16444f;
+}
+
+.tx-icon {
+    font-size: 55px;
+    margin-right: 10px;
+}
+
+.incoming .tx-icon {
+    color: #03a678;
+}
+
+.outgoing .tx-icon {
+    color: #dd2c00;
+}
+
+.tx-list {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.tx-list:hover {
+    background-color: #f2f2f2;
+}
+
+.incoming .amount {
+    color: #03a678;
+}
+
+.outgoing .amount {
+    color: #dd2c00;
 }

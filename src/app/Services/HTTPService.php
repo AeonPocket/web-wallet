@@ -12,6 +12,7 @@ namespace App\Services;
 use App\Utils\error;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class HTTPService
@@ -32,9 +33,11 @@ class HTTPService
             ]
         ]);
 
-        if ($response->getStatusCode() == 200)
-            return json_decode($response->getBody(), true)['result'];
+        $response = json_decode($response->getBody(), true);
+
+        if (array_has($response, 'result'))
+            return $response['result'];
         else
-            throw new HttpException($response->getStatusCode(), json_decode($response->getBody(), true)['error']['message']);
+            throw new HttpException(503, $response['error']['message']);
     }
 }

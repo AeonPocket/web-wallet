@@ -12,6 +12,12 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 controller: 'loginCtrl',
                 data: {requireLogin: false}
             })
+            .state('register', {
+                url: '/register',
+                templateUrl: 'templates/views/register.html',
+                controller: 'registerCtrl',
+                data: {requireLogin: false}
+            })
             .state('wallet', {
                 url: '/wallet',
                 templateUrl: 'templates/views/wallet.html',

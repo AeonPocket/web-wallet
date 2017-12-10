@@ -1,14 +1,26 @@
 angular.module('aeonPocket').controller('walletHomeCtrl', [
-    '$scope', 'walletService',
-    function ($scope, walletService) {
+    '$scope', '$mdToast', 'walletService',
+    function ($scope, $mdToast, walletService) {
+
+        $scope.refresh = function() {
+            walletService.refresh().then(function() {
+                $scope.init();
+            }, function (data) {
+                $mdToast.show($mdToast.simple().textContent(data.message));
+            });
+        }
 
         $scope.init = function () {
             walletService.getTransactions().then(function(data) {
-                if (data.status === 'Success') {
-
+                if (data.status === 'success') {
+                    $scope.transactions = data.transfers;
                 } else {
                     $scope.errorMessage = data.message;
                 }
+            });
+
+            walletService.getBalance().then(function(data) {
+                $scope.setWalletParam('balance', data.balance);
             });
         }
 

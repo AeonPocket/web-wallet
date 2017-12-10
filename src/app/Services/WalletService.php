@@ -17,6 +17,7 @@ use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferRequest;
 use App\Utils\error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -70,7 +71,7 @@ class WalletService
         }
 
         WalletDAL::createWallet($res['address'], $timestamp, $bcHeight, $transfers);
-        return ["status" => "success", "seed" => $res['seed']];
+        return ["status" => "success", "seed" => $seed];
     }
 
     public function setWallet(Request $request) {
@@ -114,7 +115,8 @@ class WalletService
         ));
         $result = new stdClass();
         $result->status = 'success';
-        $result->balance = $res['balance'];
+        Log::info($res['balance']);
+        $result->balance = $res['balance']/(pow(10, 12));
         return $result;
     }
 
@@ -149,7 +151,11 @@ class WalletService
             $res = $this->rpcService->getTransactions($req);
             $result = new stdClass();
             $result->status = "success";
-            $result->transfers =$res['transfers'];
+            $result->transfers = [];
+            foreach ($res['transfers'] as $transfer) {
+                $transfer['amount'] = $transfer['amount']/pow(10, 12);
+                array_push($result->transfers, $transfer);
+            }
             return $result;
         } else {
             $res = new stdClass();

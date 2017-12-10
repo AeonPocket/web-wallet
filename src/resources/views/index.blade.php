@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta name="theme-color" content="#16444f" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Aeon Pocket</title>
+    <title>AEON Pocket</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 
     <!-- htmlmin:ignore -->
@@ -24,6 +24,7 @@
 
     <!--Controllers-->
     <script src="js/controllers/loginCtrl.js"></script>
+    <script src="js/controllers/registerCtrl.js"></script>
     <script src="js/controllers/walletCtrl.js"></script>
     <script src="js/controllers/walletHomeCtrl.js"></script>
     <script src="js/controllers/walletSendCtrl.js"></script>
