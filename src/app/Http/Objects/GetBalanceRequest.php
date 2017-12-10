@@ -40,4 +40,21 @@ class GetBalanceRequest
      * @var String
      */
     public $transfers;
+
+    /**
+     * GetBalanceRequest constructor.
+     * @param String $seed
+     * @param int $account_create_time
+     * @param int $local_bc_height
+     * @param String $transfers
+     */
+    public function __construct($seed, $account_create_time, $local_bc_height, $transfers)
+    {
+        $this->seed = $seed;
+        $this->account_create_time = $account_create_time;
+        $this->local_bc_height = $local_bc_height;
+        $this->transfers = $transfers;
+    }
+
+
 }

@@ -32,6 +32,8 @@ class CreateWalletsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wallets');
+        Schema::connection($this->connection)->table('wallets', function (Blueprint $collection) {
+            $collection->drop();
+        });
     }
 }

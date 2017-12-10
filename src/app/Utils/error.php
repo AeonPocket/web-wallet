@@ -16,9 +16,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class error
 {
     // Keys of errors
-    const USER_EXISTS = "userExists";
+    const WALLET_EXISTS = "userExists";
     const ERROR_WHILE_ERROR = "errorWhileError";
-    const USER_NOT_FOUND = "userNotFound";
+    const WALLET_NOT_FOUND = "userNotFound";
     const VALIDATION_FAILED = "validationFailed";
     const ALREADY_LOGGED_IN = "alreadyLoggedIn";
     const FORBIDDEN = "forbidden";
@@ -31,8 +31,8 @@ class error
      */
     private static $error = array(
         // User errors
-        self::USER_EXISTS           => array("code" => 1000, "message" => "User already registered"),
-        self::USER_NOT_FOUND        => array("code" => 1001, "message" => "User not found"),
+        self::WALLET_EXISTS         => array("code" => 1000, "message" => "Wallet already registered"),
+        self::WALLET_NOT_FOUND      => array("code" => 1001, "message" => "Wallet not found"),
         self::ALREADY_LOGGED_IN     => array("code" => 1004, "message" => "This action cannot be performed by logged in user"),
 
         // General errors

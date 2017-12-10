@@ -21,5 +21,4 @@ RUN pecl install mongodb \
 
 WORKDIR /var/www/html
 
-CMD ["php", "artisan", "migrate"]
-CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
+CMD php artisan migrate && php artisan serve --host=0.0.0.0

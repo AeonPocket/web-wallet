@@ -10,6 +10,8 @@ namespace App\Http\Controllers\Account;
 
 
 use App\Services\RPCService;
+use App\Services\WalletService;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
@@ -17,29 +19,22 @@ use Illuminate\Http\Request;
 class UserController
 {
     private $rpcService;
+    private $walletService;
 
     public function __construct(){
         $this->rpcService = new RPCService();
+        $this->walletService = new WalletService();
     }
 
-    public function register() {
-
+    public function login(Request $request) {
+        $this->walletService->setWallet($request->input('seed'));
+        return ["success" => true];
     }
 
-    public function login(Request $req) {
-        $validator = Validator::make([
-            'seed' => $req->input('seed')
-        ], [
-            'seed' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-        return $this->rpcService->setWallet($req->seed);
-    }
-
-    public function logout() {
-
+    public function logout(Request $request) {
+        $this->guard()->logout();
+        $request->session()->flush();
+        $request->session()->regenerate();
+        return ["success" => true];
     }
 }

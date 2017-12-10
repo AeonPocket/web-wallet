@@ -1,44 +1,31 @@
 <?php
 
 namespace App\Http\Controllers\Wallet;
+use App\Services\WalletService;
+use Illuminate\Http\Request;
 use \stdClass;
-use App\Http\Objects\GetBalanceRequest;
-use App\Models\Wallet;
-use App\Services\RPCService;
 use App\Http\Controllers\Controller;
 
 class WalletController extends Controller
 {
-    private $rpcService;
-    public function __construct()
-    {
-        $this->rpcService = new RPCService();
+    private $walletService;
+
+    public function __construct() {
+        $this->walletService = new WalletService();
     }
 
-    public function create(){
-       $res = $this->rpcService->createWallet();
-       $wallet = new Wallet;
-       $wallet->address = $res['address'];
-       $wallet->bcHeight = $res['local_bc_height'];
-       $wallet->transfers = $res ['transfers'];
-       $wallet->createTime = $res['account_create_time'];
-       if( false&& $wallet->save()){
-           $response = new stdClass();
-           $response->seed =$res['seed'];
-           return response()->json($response);
-       } else
-       {
-           return response()->json(["message" => "Could not persist wallet"],418);
-       }
+    public function create(Request $request) {
+        if ($request->input('seed') != "" && $request->input('seed') != null) {
+            return $this->walletService->restoreExistingWallet($request->input('seed'));
+        } else {
+            return $this->walletService->createNewWallet();
+        }
     }
 
-    public function getBalance(){
-        $req = new GetBalanceRequest();
-        $req->account_create_time = 1512887431;
-        $req->local_bc_height=899885;
-        $req->seed ="beneath hundred tool mark drove peace shower energy gift thought bowl shall them soon slide fully respond dear smell college peel party once forever";
-        $req->transfers= "22 serialization::archive 15 0 0 0 0";
-        return response()->json($this->rpcService->getBalance($req));
+    public function getBalance() {
+        $res = new stdClass();
+        $res->balance = $this->walletService->getBalance();
+        return response()->json($res);
     }
 
 }

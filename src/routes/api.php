@@ -21,7 +21,6 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
 
         Route::group(['middleware' => 'guest'], function(){
             Route::post('login', 'UserController@login');
-            Route::post('register', 'UserController@create');
         });
 
         Route::group(['middleware' => ['auth','auth.basic']], function (){
@@ -31,8 +30,13 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
 
     // Path: /wallet
     Route::group(['prefix' => 'wallet', 'namespace'=>'Wallet'], function(){
-       Route::get('create', 'WalletController@create');
-       Route::get('balance','WalletController@getBalance');
+        Route::group(['middleware' => 'guest'], function(){
+            Route::post('create', 'WalletController@create');
+        });
+
+        Route::group(['middleware' => ['auth','auth.basic']], function (){
+            Route::get('balance','WalletController@getBalance');
+        });
     });
 
 });
