@@ -23,7 +23,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
             Route::post('login', 'UserController@login');
         });
 
-        Route::group(['middleware' => ['auth','auth.basic']], function (){
+        Route::group(['middleware' => ['authentication']], function (){
             Route::get('logout', 'UserController@logout');
         });
     });
@@ -34,7 +34,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
             Route::post('create', 'WalletController@create');
         });
 
-        Route::group(['middleware' => ['auth','auth.basic']], function (){
+        Route::group(['middleware' => ['authentication']], function (){
             Route::get('balance','WalletController@getBalance');
         });
     });

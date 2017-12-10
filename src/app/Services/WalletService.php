@@ -83,7 +83,6 @@ class WalletService
             Session::regenerate();
 
             // Set session variables
-            Auth::
             Session::put('seed', $seed);
             Session::put('address', $res['address']);
             Session::put('viewKey', $res['key']);

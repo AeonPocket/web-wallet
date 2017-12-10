@@ -32,7 +32,6 @@ class UserController
     }
 
     public function logout(Request $request) {
-        $this->guard()->logout();
         $request->session()->flush();
         $request->session()->regenerate();
         return ["success" => true];

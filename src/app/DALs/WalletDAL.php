@@ -10,7 +10,6 @@ namespace App\DALs;
 
 
 use App\Models\Wallet;
-use phpDocumentor\Reflection\Types\Integer;
 
 class WalletDAL
 {
