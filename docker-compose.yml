@@ -24,3 +24,5 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=aeon
       - MONGO_INITDB_ROOT_PASSWORD=P@ssword1
       - MONGO_INITDB_DATABASE=aeon
+    ports:
+      - 27017:27017

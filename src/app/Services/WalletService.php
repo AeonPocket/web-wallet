@@ -17,6 +17,7 @@ use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferRequest;
 use App\Utils\error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -41,7 +42,17 @@ class WalletService
         return ["status" => "success", "seed" => $res['seed']];
     }
 
-    public function restoreExistingWallet(String $seed) {
+    public function restoreExistingWallet($seed) {
+        $validator = Validator::make([
+            'seed' => $seed
+        ], [
+            'seed' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
         $timestamp = now()->timestamp;
         $bcHeight = 0;
         $transfers = self::EMPTY_TRANSFER;
@@ -63,7 +74,7 @@ class WalletService
         return ["status" => "success", "seed" => $res['seed']];
     }
 
-    public function setWallet(String $seed) {
+    public function setWallet($seed) {
         $validator = Validator::make([
             'seed' => $seed
         ], [
@@ -82,18 +93,18 @@ class WalletService
         // Get wallet transfers from db
         $wallet = WalletDAL::getWallet($res['address']);
 
-        if ($wallet != null) {
-            // Generate a new session.
-            Session::regenerate();
-
-            // Set session variables
-            Session::put('seed', $seed);
-            Session::put('address', $res['address']);
-            Session::put('viewKey', $res['key']);
-            Session::put('spendKey', $res['spend_key']);
-        } else {
-            error::getBadRequestException(error::WALLET_NOT_FOUND);
+        if ($wallet == null) {
+            throw error::getBadRequestException(error::WALLET_NOT_FOUND);
         }
+
+        // Generate a new session.
+        Session::regenerate();
+
+        // Set session variables
+        Session::put('seed', $seed);
+        Session::put('address', $res['address']);
+        Session::put('viewKey', $res['key']);
+        Session::put('spendKey', $res['spend_key']);
     }
 
     public function getBalance() {

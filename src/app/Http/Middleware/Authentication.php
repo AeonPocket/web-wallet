@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Utils\error;
 use Closure;
+use Illuminate\Support\Facades\Log;
 
 class Authentication
 {

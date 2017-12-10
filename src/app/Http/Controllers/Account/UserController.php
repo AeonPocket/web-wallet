@@ -37,4 +37,8 @@ class UserController
         $request->session()->regenerate();
         return ["success" => true];
     }
+
+    public function getAccount(Request $request) {
+        return ['address' => $request->session()->get('address')];
+    }
 }

@@ -19,21 +19,19 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
     // Path: /account
     Route::group(['prefix' => 'account', 'namespace' => 'Account'], function (){
 
-        Route::group(['middleware' => 'guest'], function(){
+        Route::group(['middleware' => 'open'], function(){
             Route::post('login', 'UserController@login');
+            Route::post('create', 'WalletController@create');
         });
 
         Route::group(['middleware' => ['authentication']], function (){
             Route::get('logout', 'UserController@logout');
+            Route::get('/', 'UserController@getAccount');
         });
     });
 
     // Path: /wallet
     Route::group(['prefix' => 'wallet', 'namespace'=>'Wallet'], function(){
-        Route::group(['middleware' => 'guest'], function(){
-            Route::post('create', 'WalletController@create');
-        });
-
         Route::group(['middleware' => ['authentication']], function (){
             Route::get('balance','WalletController@getBalance');
             Route::get('refresh','WalletController@refresh');
