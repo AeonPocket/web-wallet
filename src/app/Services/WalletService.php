@@ -11,6 +11,7 @@ namespace App\Services;
 
 use App\DALs\WalletDAL;
 use App\Http\Objects\GetBalanceRequest;
+use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Utils\error;
@@ -22,7 +23,8 @@ use stdClass;
 class WalletService
 {
     private $rpcService;
-
+    const EMPTY_TRANSFER = "22 serialization::archive 15 0 0 0 0";
+    const TRANSFER_TYPE_ALL = "all";
     public function __construct() {
         $this->rpcService = new RPCService();
     }
@@ -39,7 +41,7 @@ class WalletService
     public function restoreExistingWallet(String $seed) {
         $timestamp = now()->timestamp;
         $bcHeight = 0;
-        $transfers = "22 serialization::archive 15 0 0 0 0";
+        $transfers = self::EMPTY_TRANSFER;
         $res = $this->rpcService->setWallet(new SetWalletRequest(
             $seed, $timestamp, $bcHeight, $transfers
         ));
@@ -71,7 +73,7 @@ class WalletService
 
         // Get wallet address and keys using the seed.
         $res = $this->rpcService->setWallet(new SetWalletRequest(
-            $seed, now()->timestamp, 0, "22 serialization::archive 15 0 0 0 0"
+            $seed, now()->timestamp, 0, self::EMPTY_TRANSFER
         ));
 
         // Get wallet transfers from db
@@ -93,10 +95,13 @@ class WalletService
 
     public function getBalance() {
         $wallet = WalletDAL::getWallet(Session::get('address'));
-        $res = $this->rpcService->getBalance(new GetBalanceRequest(
+        $res= $this->rpcService->getBalance(new GetBalanceRequest(
             Session::get('seed'), $wallet->createTime, $wallet->bcHeight, $wallet->transfers
         ));
-        return $res['balance'];
+        $result = new stdClass();
+        $result->status = 'success';
+        $result->balance = $res['balance'];
+        return $result;
     }
 
 
@@ -114,6 +119,29 @@ class WalletService
         WalletDAL::updateWallet($wallet, $res['local_bc_height'], $result->refreshedOn, $res['transfers']);
         $result->balance = $res['balance'];
         $result->currentHeight = $res['local_bc_height'];
+        $result->status = "success";
         return $result;
+    }
+
+    public function getIncomingTransfers(){
+        $wallet = WalletDAL::getWallet(Session::get('address'));
+        if(strcmp($wallet->getAttribute('transfers'),self::EMPTY_TRANSFER)){
+            $req = new GetTransactionsRequests();
+            $req->local_bc_height = $wallet->getAttribute('bcHeight');
+            $req->transfers = $wallet->getAttribute('transfers');
+            $req->account_create_time = $wallet->getAttribute('createTime');
+            $req->seed = Session::get('seed');
+            $req->transfer_type = self::TRANSFER_TYPE_ALL;
+            $res = $this->rpcService->getTransactions($req);
+            $result = new stdClass();
+            $result->status = "success";
+            $result->transfers =$res['transfers'];
+            return $result;
+        } else {
+            $res = new stdClass();
+            $res->status = "fail";
+            $res->message ="No Transactions found";
+           return $res;
+        }
     }
 }

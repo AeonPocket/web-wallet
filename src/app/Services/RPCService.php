@@ -36,7 +36,7 @@ class RPCService
     }
 
     public function getTransactions(GetTransactionsRequests $request) {
-        return $this->httpService->request('set_wallet', $request);
+        return $this->httpService->request('incoming_transfers', $request);
     }
 
     public function transfer(TransferRequest $request) {
