@@ -40,7 +40,7 @@ class RPCService
     }
 
     public function transfer(TransferRequest $request) {
-        return $this->httpService->request('set_wallet', $request);
+        return $this->httpService->request('transfer', $request);
     }
 
     public function refresh(RefreshRequest $request) {

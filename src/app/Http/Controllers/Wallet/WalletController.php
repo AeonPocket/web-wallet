@@ -49,4 +49,15 @@ class WalletController extends Controller
         $res->status = 'success';
         return response()->json($res);
     }
+
+    public function transferFunds(Request $request){
+     $this->validate($request,[
+            'mixin' => 'required|numeric|max:10|min:3',
+            'destinations'=>'required|max:1|min:1',
+            'destinations.*'=>'required',
+            'unlockTime'=>'required|numeric',
+            'paymentId'=>'required|string'
+        ]);
+        return response()->json($this->walletService->transferFunds($request));
+    }
 }

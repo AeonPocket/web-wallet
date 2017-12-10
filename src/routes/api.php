@@ -40,6 +40,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
             Route::get('seed','WalletController@getSeed');
             Route::get('keys','WalletController@getKeys');
             Route::get('transfer','WalletController@getIncomingTransfers');
+            Route::post('transfer','WalletController@transferFunds');
         });
     });
 

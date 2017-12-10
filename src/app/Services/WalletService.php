@@ -14,7 +14,9 @@ use App\Http\Objects\GetBalanceRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
+use App\Http\Objects\TransferRequest;
 use App\Utils\error;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -25,6 +27,7 @@ class WalletService
     private $rpcService;
     const EMPTY_TRANSFER = "22 serialization::archive 15 0 0 0 0";
     const TRANSFER_TYPE_ALL = "all";
+    const TRANSFER_FEE = 10000000;
     public function __construct() {
         $this->rpcService = new RPCService();
     }
@@ -143,5 +146,21 @@ class WalletService
             $res->message ="No Transactions found";
            return $res;
         }
+    }
+    public function transferFunds(Request $request){
+        $wallet = WalletDAL::getWallet(Session::get('address'));
+        $req = new TransferRequest(
+            $request->get('destinations'),
+            self::TRANSFER_FEE,
+            $request->get('mixin'),
+            $request->get('unlockTime'),
+            $request->get('paymentId'),
+            Session::get('seed'),
+            $wallet->getAttribute('createTime'),
+            $wallet->getAttribute('bcHeight'),
+            $wallet->getAttribute('transfers'));
+        $res = $this->rpcService->transfer($req);
+        $result = new stdClass();
+        return $res;
     }
 }
