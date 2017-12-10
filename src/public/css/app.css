@@ -148,3 +148,33 @@ md-card > div {
 .outgoing .amount {
     color: #dd2c00;
 }
+
+.action-button {
+    border-radius: 6px;
+    width: 200px;
+    border: 2px solid #5ebcd3;
+    padding: 10px;
+    color: #5ebcd3;
+    display: inline-block;
+    text-decoration: none;
+    margin: 10px;
+}
+
+.action-button:hover {
+    color: #fff;
+    background-color: #2c88a0;
+    border-color: #2c88a0;
+}
+
+.footer {
+    color: #fff;
+    padding: 10px;
+}
+
+.footer a {
+    color: #5ebcd3;
+}
+
+.footer a {
+    color: #2c88a0;
+}

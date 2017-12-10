@@ -48,16 +48,16 @@
 
             </div>
             <md-virtual-repeat-container flex>
-                <div class="tx-list" ng-class="transaction.spent?'outgoing':'incoming'" md-item-size="75" md-virtual-repeat="transaction in transactions" layout="row">
+                <div class="tx-list" ng-class="transaction.spent?'outgoing':'incoming'" md-item-size="76" md-virtual-repeat="transaction in transactions" layout="row">
                     <div>
                         <i class="material-icons tx-icon" ng-if="!transaction.spent">file_download</i>
                         <i class="material-icons tx-icon" ng-if="transaction.spent">file_upload</i>
                     </div>
                     <div flex>
-                        <p style="word-break: break-all; font-weight: bold;">
-                            <a target="_blank" href="https://chainradar.com/aeon/transaction/{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}">{{transaction.tx_hash}}</a>
+                        <p md-truncate style="font-weight: bold;">
+                            <a target="_blank" href="https://chainradar.com/aeon/transaction/{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}">{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}</a>
                         </p>
-                        <p class="amount">{{transaction.amount.toFixed(12)}}</p>
+                        <p class="amount">{{transaction.amount.toFixed(12)}} <strong>AEON</strong></p>
                         <p>{{transaction.global_index}}</p>
                     </div>
                 </div>

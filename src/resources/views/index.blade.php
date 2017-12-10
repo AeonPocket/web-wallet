@@ -29,6 +29,7 @@
     <script src="js/controllers/walletHomeCtrl.js"></script>
     <script src="js/controllers/walletSendCtrl.js"></script>
     <script src="js/controllers/walletReceiveCtrl.js"></script>
+    <script src="js/controllers/walletReviewAccountCtrl.js"></script>
 
     <!--Services-->
     <script src="js/services/userService.js"></script>

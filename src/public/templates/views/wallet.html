@@ -31,13 +31,23 @@
                     Receive
                 </md-button>
             </md-menu-item>
-            <div flex></div>
+            <md-menu-item>
+                <md-button ng-click="go('wallet.reviewAccount')">
+                    <i class="material-icons">vpn_key</i>
+                    Review Account
+                </md-button>
+            </md-menu-item>
             <md-menu-item>
                 <md-button ng-click="logout()">
                     <i class="material-icons">power_settings_new</i>
                     Logout
                 </md-button>
             </md-menu-item>
+            <div flex></div>
+            <div style="padding: 5px 10px; border-top: 1px solid #ccc;">
+                &copy; Aeon Pocket, 2017<br/>
+                <a href="#!/disclaimer">Disclaimer</a> | <a href="#!/privacy">Privacy</a>
+            </div>
         </md-content>
     </md-sidenav>
     <div flex layout="column" ui-view>

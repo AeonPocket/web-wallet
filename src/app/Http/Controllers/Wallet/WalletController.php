@@ -46,6 +46,7 @@ class WalletController extends Controller
         $res->viewKey = Session::get('viewKey');
         $res->spendKey = Session::get('spendKey');
         $res->address = Session::get('address');
+        $res->seed = Session::get('seed');
         $res->status = 'success';
         return response()->json($res);
     }

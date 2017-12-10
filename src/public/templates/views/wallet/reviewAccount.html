@@ -1,0 +1,34 @@
+<md-toolbar class="md-whiteframe-1dp" layout="row" layout-align="start center">
+    <md-button hide-gt-md class="md-icon-button" ng-click="toggleSideNav()">
+        <i class="material-icons" style="vertical-align: middle; color: #fff;">menu</i>
+    </md-button>
+    <strong flex md-truncate>Review Account</strong>
+    <div flex></div>
+</md-toolbar>
+<div flex layout="column" layout-align="center center">
+    <md-card style="width: 600px; max-width: 90%;">
+        <div class="header">
+            <h1 class="text-center" style="margin: 10px;">Your Account Details</h1>
+        </div>
+        <div flex style="word-break: break-all;" layout-align="start center">
+            <label class="standalone">Account Address (Public)</label><br/>
+            {{data.address}}
+        </div>
+        <div flex style="word-break: break-all;" layout-align="start center">
+            <label class="standalone">View Key (Private)</label><br/>
+            {{data.viewKey}}
+        </div>
+        <div flex style="word-break: break-all;" layout-align="start center">
+            <label class="standalone">Spend Key (Private)</label><br/>
+            {{data.spendKey}}
+        </div>
+        <div flex style="word-break: break-all;" layout-align="start center">
+            <label class="standalone">Your Private Login Key</label><br/>
+            {{data.seed}}
+        </div>
+
+        <div class="help-text text-center">
+            <strong>Note:</strong> Please keep above information safe and secure.
+        </div>
+    </md-card>
+</div>

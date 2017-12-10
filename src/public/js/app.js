@@ -6,7 +6,12 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         function ($stateProvider, $urlRouterProvider, $mdThemingProvider, cfpLoadingBarProvider) {
 
             // Various States
-            $stateProvider.state('login', {
+            $stateProvider.state('home', {
+                url: '/home',
+                templateUrl: 'templates/views/home.html',
+                data: {requireLogin: false}
+            })
+            .state('login', {
                 url: '/login',
                 templateUrl: 'templates/views/login.html',
                 controller: 'loginCtrl',
@@ -42,10 +47,16 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 templateUrl: 'templates/views/wallet/receive.html',
                 controller: 'walletReceiveCtrl',
                 data: {requireLogin: true}
+            })
+            .state('wallet.reviewAccount', {
+                url: '/reviewAccount',
+                templateUrl: 'templates/views/wallet/reviewAccount.html',
+                controller: 'walletReviewAccountCtrl',
+                data: {requireLogin: true}
             });
 
             // Default page.
-            $urlRouterProvider.otherwise('/login');
+            $urlRouterProvider.otherwise('/home');
 
             // Theme config.
             $mdThemingProvider.definePalette('starSearchPalette', {
@@ -138,7 +149,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 // if login is required and user is unauthorized,
                 // redirect to login page.
                 event.preventDefault();
-                $state.go('login');
+                $state.go('home');
                 return;
             } else if (!toState.data.requireLogin && $rootScope.isAuthorized()) {
                 // if page is for only guest user and user is logged in,
@@ -188,6 +199,6 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
             $state.go('wallet');
         }, function (data) {
             localStorage.clear();
-            $state.go('login');
+            $state.go('home');
         })
     }]);
