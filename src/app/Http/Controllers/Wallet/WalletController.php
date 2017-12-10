@@ -5,7 +5,7 @@ use App\Services\WalletService;
 use Illuminate\Http\Request;
 use \stdClass;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Session;
 class WalletController extends Controller
 {
     private $walletService;
@@ -30,5 +30,19 @@ class WalletController extends Controller
 
     public function refresh() {
         return response()->json($this->walletService->refresh());
+    }
+
+    public function getSeed(){
+        $res = new stdClass();
+        $res->seed = Session::get('seed');
+        return response()->json($res);
+    }
+
+    public function getKeys(){
+        $res = new stdClass();
+        $res->viewKey = Session::get('viewKey');
+        $res->spendKey = Session::get('spendKey');
+        $res->address = Session::get('address');
+        return response()->json($res);
     }
 }

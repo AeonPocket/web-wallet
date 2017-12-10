@@ -8,12 +8,10 @@
 
 namespace App\Http\Controllers\Account;
 
-
+use \stdClass;
 use App\Services\RPCService;
 use App\Services\WalletService;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class UserController
@@ -28,7 +26,10 @@ class UserController
 
     public function login(Request $request) {
         $this->walletService->setWallet($request->input('seed'));
-        return ["success" => true];
+        $res = new stdClass();
+        $res->success = true;
+        $res->address = Session::get('address');
+        return json_encode($res);
     }
 
     public function logout(Request $request) {

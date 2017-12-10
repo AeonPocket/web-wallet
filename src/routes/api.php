@@ -37,6 +37,8 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
         Route::group(['middleware' => ['authentication']], function (){
             Route::get('balance','WalletController@getBalance');
             Route::get('refresh','WalletController@refresh');
+            Route::get('seed','WalletController@getSeed');
+            Route::get('keys','WalletController@getKeys');
         });
     });
 
