@@ -28,4 +28,11 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
             Route::get('logout', 'UserController@logout');
         });
     });
+
+    // Path: /wallet
+    Route::group(['prefix' => 'wallet', 'namespace'=>'Wallet'], function(){
+       Route::get('create', 'WalletController@create');
+       Route::get('balance','WalletController@getBalance');
+    });
+
 });

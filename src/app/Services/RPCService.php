@@ -28,11 +28,11 @@ class RPCService
     }
 
     public function createWallet() {
-        return $this->httpService->request('create_wallet', null);
+        return $this->httpService->request('create_wallet', "");
     }
 
     public function getBalance(GetBalanceRequest $request) {
-        return $this->httpService->request('set_wallet', $request);
+        return $this->httpService->request('getbalance', $request);
     }
 
     public function getTransactions(GetTransactionsRequests $request) {

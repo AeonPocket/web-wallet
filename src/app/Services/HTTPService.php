@@ -23,7 +23,7 @@ class HTTPService
         $this->http = new Client(Array());
     }
 
-    public function request(string $methodName, object $obj) {
+    public function request(string $methodName,  $obj = null) {
         $response = $this->http->post(env("APP_RPC_URL", "http://localhost:11191"), [
             RequestOptions::JSON => [
                 "jsonrpc" => "2.0",
