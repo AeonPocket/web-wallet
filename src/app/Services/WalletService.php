@@ -17,7 +17,6 @@ use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferRequest;
 use App\Utils\error;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -74,7 +73,8 @@ class WalletService
         return ["status" => "success", "seed" => $res['seed']];
     }
 
-    public function setWallet($seed) {
+    public function setWallet(Request $request) {
+        $seed = $request->input('seed');
         $validator = Validator::make([
             'seed' => $seed
         ], [
@@ -98,13 +98,13 @@ class WalletService
         }
 
         // Generate a new session.
-        Session::regenerate();
+        $request->session()->regenerate();
 
         // Set session variables
-        Session::put('seed', $seed);
-        Session::put('address', $res['address']);
-        Session::put('viewKey', $res['key']);
-        Session::put('spendKey', $res['spend_key']);
+        $request->session()->put('seed', $seed);
+        $request->session()->put('address', $res['address']);
+        $request->session()->put('viewKey', $res['key']);
+        $request->session()->put('spendKey', $res['spend_key']);
     }
 
     public function getBalance() {

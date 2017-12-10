@@ -25,9 +25,13 @@
     <!--Controllers-->
     <script src="js/controllers/loginCtrl.js"></script>
     <script src="js/controllers/walletCtrl.js"></script>
+    <script src="js/controllers/walletHomeCtrl.js"></script>
+    <script src="js/controllers/walletSendCtrl.js"></script>
+    <script src="js/controllers/walletReceiveCtrl.js"></script>
 
     <!--Services-->
     <script src="js/services/userService.js"></script>
+    <script src="js/services/walletService.js"></script>
 </head>
 <body ng-app="aeonPocket" ng-cloak layout="column">
 <!--Progress bar to show ongoing API call-->

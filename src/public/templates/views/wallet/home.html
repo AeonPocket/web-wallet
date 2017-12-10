@@ -1,0 +1,49 @@
+<md-toolbar class="md-whiteframe-1dp" layout="row" layout-align="start center">
+    <md-button hide-gt-md class="md-icon-button" ng-click="toggleSideNav()">
+        <i class="material-icons" style="vertical-align: middle; color: #fff;">menu</i>
+    </md-button>
+    <strong flex md-truncate>Home</strong>
+    <div flex></div>
+    <md-button class="md-icon-button">
+        <i class="material-icons">refresh</i>
+        <md-tooltip>Sync Wallet</md-tooltip>
+    </md-button>
+</md-toolbar>
+<div flex layout="column" style="overflow-y: auto;">
+    <md-card>
+        <div class="header">
+            <strong>Wallet Information</strong>
+        </div>
+        <div>
+            <div layout="row">
+                <div>
+                    <i class="material-icons medium-icon">account_balance_wallet</i>
+                </div>
+                <div flex style="word-break: break-all;" layout-align="start center">
+                    <label class="standalone">Address</label><br/>
+                    {{wallet.address}}
+                </div>
+            </div>
+            <br/>
+            <div layout="row">
+                <div>
+                    <i class="material-icons medium-icon">account_balance</i>
+                </div>
+                <div layout-align="start center">
+                    <label class="standalone">Balance</label><br/>
+                    {{wallet.balance.toFixed(12)}} <strong>AEON</strong>
+                </div>
+            </div>
+        </div>
+    </md-card>
+    <md-card flex>
+        <div class="header">
+            <strong>Transactions</strong>
+        </div>
+        <div flex layout="column">
+            <div ng-if="errorMessage" flex layout="column" layout-align="center center">
+                <p style="color: #555; text-transform: uppercase;">{{errorMessage}}</p>
+            </div>
+        </div>
+    </md-card>
+</div>

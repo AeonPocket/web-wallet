@@ -16,8 +16,27 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 url: '/wallet',
                 templateUrl: 'templates/views/wallet.html',
                 controller: 'walletCtrl',
-                data: {requireLogin: false}
+                data: {requireLogin: true},
+                redirectTo: 'wallet.home'
             })
+            .state('wallet.home', {
+                url: '/home',
+                templateUrl: 'templates/views/wallet/home.html',
+                controller: 'walletHomeCtrl',
+                data: {requireLogin: true}
+            })
+            .state('wallet.send', {
+                url: '/send',
+                templateUrl: 'templates/views/wallet/send.html',
+                controller: 'walletSendCtrl',
+                data: {requireLogin: true}
+            })
+            .state('wallet.receive', {
+                url: '/send',
+                templateUrl: 'templates/views/wallet/receive.html',
+                controller: 'walletReceiveCtrl',
+                data: {requireLogin: true}
+            });
 
             // Default page.
             $urlRouterProvider.otherwise('/login');
@@ -91,7 +110,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
          * @returns {boolean}
          */
         $rootScope.isAuthorized = function() {
-            return (localStorage.getItem('userObj') !== null);
+            return (localStorage.getItem('address') !== null);
         }
 
         /**
@@ -119,7 +138,14 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 // if page is for only guest user and user is logged in,
                 // redirect to search page.
                 event.preventDefault();
-                $state.go('search');
+                $state.go('wallet');
+                return;
+            }
+
+            // If is an intermediate state
+            if (toState.redirectTo) {
+                event.preventDefault();
+                $state.go(toState.redirectTo, toParams, {location: 'replace'});
                 return;
             }
 

@@ -1,13 +1,12 @@
-angular.module('aeonPocket').service('userService', [
+angular.module('aeonPocket').service('walletService', [
     '$http', '$q',
     function ($http, $q) {
 
-        this.login = function (data) {
+        this.getBalance = function() {
             var deferred = $q.defer();
             $http({
-                method: 'POST',
-                url: '/api/v1/account/login',
-                data: data
+                method: 'GET',
+                url: '/api/v1/wallet/balance'
             }).then(function (resp) {
                 deferred.resolve(resp.data);
             }, function (resp) {
@@ -16,11 +15,11 @@ angular.module('aeonPocket').service('userService', [
             return deferred.promise;
         }
 
-        this.getAccount = function () {
+        this.getTransactions = function() {
             var deferred = $q.defer();
             $http({
                 method: 'GET',
-                url: '/api/v1/account/'
+                url: '/api/v1/wallet/transactions'
             }).then(function (resp) {
                 deferred.resolve(resp.data);
             }, function (resp) {
@@ -29,17 +28,5 @@ angular.module('aeonPocket').service('userService', [
             return deferred.promise;
         }
 
-        this.logout = function () {
-            var deferred = $q.defer();
-            $http({
-                method: 'GET',
-                url: '/api/v1/account/logout'
-            }).then(function (resp) {
-                deferred.resolve(resp.data);
-            }, function (resp) {
-                deferred.reject(resp.data);
-            });
-            return deferred.promise;
-        }
     }
-])
+]);

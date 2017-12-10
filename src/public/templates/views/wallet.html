@@ -1,10 +1,46 @@
-<md-toolbar layout="row" layout-align="start center">
-    <strong flex md-truncate>Aeon Pocket</strong>
-    <div flex></div>
-    <md-button class="md-icon-button" aria-label="Favorite">
-        <md-icon>
-            <i class="material-icons">power_settings_new</i>
-        </md-icon>
-        <md-tooltip>Logout</md-tooltip>
-    </md-button>
-</md-toolbar>
+<section layout="row" flex>
+    <md-sidenav
+            class="md-sidenav-left"
+            md-component-id="left"
+            md-is-locked-open="$mdMedia('gt-md')"
+            md-whiteframe="4">
+        <md-toolbar class="md-theme-indigo md-tall md-whiteframe-2dp" style="height: 192px; max-height: 192px; background-color: #eee;">
+            <div class="text-center">
+                <img src="images/aeon.png" style="width: 128px;"/>
+                <div class="md-toolbar-tools" style="color: #16444f;" layout-align="center center">
+                    <p class="text-center">AEON Pocket</p>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-content flex layout="column">
+            <md-menu-item>
+                <md-button ng-click="go('wallet.home')">
+                    <i class="material-icons">home</i>
+                    Home
+                </md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ng-click="go('wallet.send')">
+                    <i class="material-icons">send</i>
+                    Send
+                </md-button>
+            </md-menu-item>
+            <md-menu-item>
+                <md-button ng-click="go('wallet.receive')">
+                    <i class="material-icons">file_download</i>
+                    Receive
+                </md-button>
+            </md-menu-item>
+            <div flex></div>
+            <md-menu-item>
+                <md-button ng-click="logout()">
+                    <i class="material-icons">power_settings_new</i>
+                    Logout
+                </md-button>
+            </md-menu-item>
+        </md-content>
+    </md-sidenav>
+    <div flex layout="column" ui-view>
+
+    </div>
+</section>

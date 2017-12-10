@@ -37,7 +37,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
             Route::get('refresh','WalletController@refresh');
             Route::get('seed','WalletController@getSeed');
             Route::get('keys','WalletController@getKeys');
-            Route::get('transfer','WalletController@getIncomingTransfers');
+            Route::get('transactions','WalletController@getIncomingTransfers');
             Route::post('transfer','WalletController@transferFunds');
         });
     });

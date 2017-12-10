@@ -25,10 +25,10 @@ class UserController
     }
 
     public function login(Request $request) {
-        $this->walletService->setWallet($request->input('seed'));
+        $this->walletService->setWallet($request);
         $res = new stdClass();
         $res->success = true;
-        $res->address = Session::get('address');
+        $res->address = $request->session()->get('address');
         return json_encode($res);
     }
 

@@ -26,6 +26,14 @@ a {
     color: #16444f;
 }
 
+.text-center {
+    text-align: center;
+}
+
+.md-button > .material-icons {
+    vertical-align: middle;
+    margin-right: 10px;
+}
 
 /*********** LOGIN PAGE *************/
 .loginBox {
@@ -58,51 +66,35 @@ md-toolbar {
     padding: 0 10px;
 }
 
-/*********** SEARCH PAGE *************/
-.search {
-    background: none;
-    color: #fff;
-    border: none;
-    outline: none;
+/* --------------------- wallet page --------------------- */
+
+.container {
+    width: 1170px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    color: var(--placeholder-color);
-}
-::-moz-placeholder { /* Firefox 19+ */
-    color: var(--placeholder-color);
-}
-:-ms-input-placeholder { /* IE 10+ */
-    color: var(--placeholder-color);
-}
-:-moz-placeholder { /* Firefox 18- */
-    color: var(--placeholder-color);
+md-card > div {
+    padding: 10px;
 }
 
-.searchRow {
-    min-height: 60px;
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
+.header {
+    border-bottom: 1px solid #ccc;
 }
 
-.planetAvatar {
-    background: url('../images/space.png');
-    background-size: 100%;
-    width: 60px;
-    height: 60px;
+.header > strong {
+    color: #666;
+    text-transform: uppercase;
+}
+
+.standalone {
+    font-weight: bold;
+    font-size: 12px;
+    color: #16444f;
+}
+
+.medium-icon {
+    font-size: 36px;
     margin-right: 10px;
-}
-
-.planetSize {
-    background-color: #f2f2f2;
-    border-radius: 50%;
-}
-
-.planetUnknown .material-icons {
-    font-size: 50px;
-    color: #f2f2f2;
-}
-
-.text-center {
-    text-align: center;
+    color: #16444f;
 }
