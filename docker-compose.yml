@@ -23,6 +23,8 @@ services:
       - MONGO_DB_PASSWORD=P@ssword1
       - MONGO_DB_MAIN_DB=admin
     network_mode: host
+    volumes:
+      - ./conf:/etc/apache2/sites-enabled
 
   aeon-docker:
     image: pushkar8723/aeon-docker
