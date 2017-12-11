@@ -29,7 +29,7 @@ class RefreshLockDAL
         }
     }
 
-    public static function Unlock(String $address, int $timestamp ) {
+    public static function Unlock(String $address) {
         $lock = RefreshLock::where('address', $address)->first();
         $lock->isLocked = false;
         $lock->save();
