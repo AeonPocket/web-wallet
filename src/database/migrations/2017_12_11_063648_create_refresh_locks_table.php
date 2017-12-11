@@ -13,7 +13,7 @@ class CreateRefreshLocksTable extends Migration
      */
     public function up()
     {
-         Schema::connection($this->connection)->create('wallets', function (Blueprint $collection) {
+         Schema::connection($this->connection)->create('refresh_locks', function (Blueprint $collection) {
             $collection->increments('id');
             $collection->string('address');
             $collection->integer('lastRefreshTime');
