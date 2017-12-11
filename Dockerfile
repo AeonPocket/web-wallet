@@ -21,4 +21,10 @@ RUN pecl install mongodb \
 
 WORKDIR /var/www/html
 
-CMD php artisan migrate && php artisan serve --host=0.0.0.0
+COPY ./src /var/www/html
+
+COPY ./conf /etc/apache2/sites-enabled/
+
+CMD chown www-data:www-data -R /var/www/html/storage \
+    && chown www-data:www-data -R /var/www/html/bootstrap \
+    && php artisan migrate && apache2-foreground

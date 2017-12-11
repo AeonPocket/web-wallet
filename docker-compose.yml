@@ -3,20 +3,34 @@ version: '2'
 services:
   php-wallet:
     image: pushkar8723/php-wallet
-    volumes:
-      - ./src:/var/www/html
-    ports:
-      - 80:8000
     depends_on:
       - mongo
       - aeon-docker
       - redis
+    environment:
+      - APP_URL=http://localhost
+      - APP_KEY=base64:8lMo2Gphbny1XQjS/Rv8gLdNCk5Saqt9agkYIfK7Il0=
+      - APP_LOG=errorlog
+      - APP_RPC_URL=http://localhost:11191/json_rpc
+      - DB_CONNECTION=mongodb
+      - REDIS_HOST=localhost
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+      - MONGO_DB_HOST=localhost
+      - MONGO_DB_PORT=27017
+      - MONGO_DB_DATABASE=aeon
+      - MONGO_DB_USERNAME=aeon
+      - MONGO_DB_PASSWORD=P@ssword1
+      - MONGO_DB_MAIN_DB=admin
+    network_mode: host
 
   aeon-docker:
     image: pushkar8723/aeon-docker
+    network_mode: host
 
   redis:
     image: redis
+    network_mode: host
 
   mongo:
     image: mongo
@@ -26,4 +40,5 @@ services:
       - MONGO_INITDB_DATABASE=aeon
     ports:
       - 27017:27017
+    network_mode: host
       

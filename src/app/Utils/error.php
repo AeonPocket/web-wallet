@@ -24,6 +24,7 @@ class error
     const FORBIDDEN = "forbidden";
     const CSRF_TOKEN_MISMATCH = "csrfTokenMismatch";
     const SESSION_EXPIRED = "sessionExpired";
+    const REFRESH_LOCKED = "refreshLocked";
 
     /**
      * Contains all error code and description for each key.
@@ -40,6 +41,7 @@ class error
         self::FORBIDDEN             => array("code" => 1101, "message" => "User not authorized to make this call"),
         self::CSRF_TOKEN_MISMATCH   => array("code" => 1102, "message" => "Invalid CSRF Token"),
         self::SESSION_EXPIRED       => array("code" => 1103, "message" => "Session Expired. Login again."),
+        self::REFRESH_LOCKED        => array("code" => 1104, "message" => "Refresh Locked. Please try after 10 minutes"),
 
         // These errors should never happen!
         // Its over 9000! :P

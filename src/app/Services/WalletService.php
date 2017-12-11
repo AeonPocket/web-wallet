@@ -129,27 +129,20 @@ class WalletService
         $refreshTime = time();
         $lock =  RefreshLockDAL::getLock($address);
         $isLocked = true;
+
         if($lock && $lock['isLocked'] ){
             //Check if the lock can be released
-            if(($refreshTime - $lock['lastRefreshTime']) > 10*60*1000  ){
+            if(($refreshTime - $lock['lastRefreshTime']) > 10*60){
                 RefreshLockDAL::Unlock($address);
                 $isLocked = false;
             } else {
-                $result = new stdClass();
-                $result->status = 'error';
-                $result->lastRefreshTime = $lock->lastRefreshTime;
-                $result->message = 'Refresh Lock :Please wait for 10 minutes to refresh';
-                return $result;
+                throw error::getBadRequestException(error::REFRESH_LOCKED);
             }
         } else {
             $isLocked = false;
         }
         if($isLocked){
-
-            $result = new stdClass();
-            $result->status = 'error';
-            $result->lastRefreshTime = $lock->lastRefreshTime;
-            $result->message = 'Refresh Lock :Please wait for 10 minutes to refresh';
+            throw error::getBadRequestException(error::REFRESH_LOCKED);
         } else {
             $wallet = WalletDAL::getWallet($address);
             $result = new stdClass();
