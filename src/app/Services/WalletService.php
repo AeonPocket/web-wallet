@@ -9,12 +9,14 @@
 namespace App\Services;
 
 
+use App\DALs\RefreshLockDAL;
 use App\DALs\WalletDAL;
 use App\Http\Objects\GetBalanceRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferRequest;
+use App\Models\Wallet;
 use App\Utils\error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -122,21 +124,51 @@ class WalletService
 
 
     public function refresh() {
-        $wallet = WalletDAL::getWallet(Session::get('address'));
-        $result = new stdClass();
-        $result->refreshedOn = time();
-        $req = new RefreshRequest();
-        $req->local_bc_height = $wallet->getAttribute('bcHeight');
-        $req->transfers = $wallet->getAttribute('transfers');
-        $req->account_create_time = $wallet->getAttribute('createTime');
-        $req->seed = Session::get('seed');
-        $res = $this->rpcService->refresh($req);
-        //We update the DB with the new values local_bc_height,transfers,createTime
-        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $result->refreshedOn, $res['transfers']);
-        $result->balance = $res['balance'];
-        $result->currentHeight = $res['local_bc_height'];
-        $result->status = "success";
-        return $result;
+
+        $address = Session::get('address');
+        $refreshTime = time();
+        $lock =  RefreshLockDAL::getLock($address);
+        $isLocked = true;
+        if($lock && $lock['isLocked'] ){
+            //Check if the lock can be released
+            if(($refreshTime - $lock['lastRefreshTime']) > 10*60*1000  ){
+                RefreshLockDAL::Unlock($address);
+                $isLocked = false;
+            } else {
+                $result = new stdClass();
+                $result->status = 'error';
+                $result->lastRefreshTime = $lock->lastRefreshTime;
+                $result->message = 'Refresh Lock :Please wait for 10 minutes to refresh';
+                return $result;
+            }
+        } else {
+            $isLocked = false;
+        }
+        if($isLocked){
+
+            $result = new stdClass();
+            $result->status = 'error';
+            $result->lastRefreshTime = $lock->lastRefreshTime;
+            $result->message = 'Refresh Lock :Please wait for 10 minutes to refresh';
+        } else {
+            $wallet = WalletDAL::getWallet($address);
+            $result = new stdClass();
+            $result->refreshedOn = $refreshTime;
+            RefreshLockDAL::Lock($address,$refreshTime);
+            $req = new RefreshRequest();
+            $req->local_bc_height = $wallet->getAttribute('bcHeight');
+            $req->transfers = $wallet->getAttribute('transfers');
+            $req->account_create_time = $wallet->getAttribute('createTime');
+            $req->seed = Session::get('seed');
+            $res = $this->rpcService->refresh($req);
+            //We update the DB with the new values local_bc_height,transfers,createTime
+            WalletDAL::updateWallet($wallet, $res['local_bc_height'], $result->refreshedOn, $res['transfers']);
+//            RefreshLockDAL::Unlock($address);
+            $result->balance = $res['balance'];
+            $result->currentHeight = $res['local_bc_height'];
+            $result->status = "success";
+            return $result;
+        }
     }
 
     public function getIncomingTransfers(){
