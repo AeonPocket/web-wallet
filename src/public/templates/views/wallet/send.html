@@ -5,13 +5,54 @@
     <strong flex md-truncate>Send AEON</strong>
     <div flex></div>
 </md-toolbar>
-<div flex layout="column">
-    <md-card>
+<div flex layout="column" layout-align="center center">
+    <md-card style="width: 600px; max-width: 90%;">
         <div class="header">
-            <strong>Send Aeons</strong>
+            <strong>Send AEON</strong>
         </div>
-        <div>
-
+        <div layout="column" style="padding: 0;">
+            <form name="sendForm" layout="column" ng-submit="submit()">
+                <div flex="1" style="overflow-y: auto; overflow-x: hidden; padding: 10px;">
+                    <md-card style="background-color: #f2f2f2; padding: 10px;" ng-repeat="destination in send.destinations">
+                        <md-input-container style="width: 100%;">
+                            <label>Wallet Address</label>
+                            <input ng-required="$index==0 || destination.amount" ng-disabled="inProgress" name="address" ng-model="destination.address"/>
+                            <div class="validation-messages" ng-messages="sendForm.address.$error">
+                                <div ng-message="required" ng-show="sendForm.address.$error.required">Required</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container style="width: 100%;">
+                            <label>Amount (AEON)</label>
+                            <input ng-required="$index==0 || destination.address" ng-disabled="inProgress" name="amount" ng-model="destination.amount" pattern="^[0-9]+\.*[0-9]{0,12}$"/>
+                            <div class="validation-messages" ng-messages="sendForm.amount.$error">
+                                <div ng-message="pattern" ng-show="sendForm.amount.$error.pattern">Invalid Amount</div>
+                                <div ng-message="required" ng-show="sendForm.amount.$error.required">Required</div>
+                            </div>
+                        </md-input-container>
+                        <md-button style="margin: 0;" ng-if="$index > 0" ng-click="remove($index)">Remove</md-button>
+                    </md-card>
+                    <md-button style="width: 100%; margin: 0;" ng-click="send.destinations.push({})">+ Add More</md-button>
+                    <md-input-container style="width: 100%;">
+                        <label>Payment ID</label>
+                        <input ng-disabled="inProgress" name="paymentId" ng-model="send.paymentId" pattern="[0-9a-f]{64}"/>
+                        <div class="validation-messages" ng-messages="sendForm.paymentId.$error">
+                            <div ng-message="pattern" ng-show="sendForm.paymentId.$error.pattern">Invalid Payment ID</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container style="width: 100%; margin-bottom: 10px;">
+                        <label>Mixin</label>
+                        <md-select ng-disabled="inProgress" ng-model="send.mixin">
+                            <md-option selected value="4">With 4 others</md-option>
+                            <md-option value="10">With 10 others</md-option>
+                            <md-option value="20">With 20 others</md-option>
+                            <md-option value="40">With 40 others</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <div style="padding: 10px;">
+                    <md-button class="md-raised md-primary" style="margin: 0; width: 100%;" type="submit">Send</md-button>
+                </div>
+            </form>
         </div>
     </md-card>
 </div>

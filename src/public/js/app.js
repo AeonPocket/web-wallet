@@ -1,7 +1,7 @@
 /**
  * AeonPocket Module configuration.
  */
-angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial', 'angular-loading-bar'])
+angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial', 'angular-loading-bar', 'monospaced.qrcode'])
     .config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider','cfpLoadingBarProvider',
         function ($stateProvider, $urlRouterProvider, $mdThemingProvider, cfpLoadingBarProvider) {
 

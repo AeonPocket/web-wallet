@@ -164,6 +164,7 @@ class WalletService
            return $res;
         }
     }
+
     public function transferFunds(Request $request){
         $wallet = WalletDAL::getWallet(Session::get('address'));
         $req = new TransferRequest(

@@ -86,7 +86,7 @@ class TransferRequest
      * @param int $local_bc_height
      * @param String $transfers
      */
-    public function __construct(array $destinations, int $fee, int $mixin, int $unlock_time, String $payment_id, String $seed, int $account_create_time, int $local_bc_height, String $transfers)
+    public function __construct(array $destinations, int $fee, int $mixin, int $unlock_time=null, String $payment_id=null, String $seed, int $account_create_time, int $local_bc_height, String $transfers)
     {
         $this->destinations = $destinations;
         $this->fee = $fee;

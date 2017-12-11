@@ -120,16 +120,12 @@ md-card > div {
 }
 
 .tx-icon {
-    font-size: 55px;
+    font-size: 35px;
+    padding: 10px;
     margin-right: 10px;
-}
-
-.incoming .tx-icon {
-    color: #03a678;
-}
-
-.outgoing .tx-icon {
-    color: #dd2c00;
+    color: #777;
+    border-radius: 50%;
+    background-color: #eee;
 }
 
 .tx-list {

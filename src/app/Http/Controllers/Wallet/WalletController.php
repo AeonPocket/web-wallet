@@ -56,8 +56,8 @@ class WalletController extends Controller
             'mixin' => 'required|numeric|max:10|min:3',
             'destinations'=>'required|max:1|min:1',
             'destinations.*'=>'required',
-            'unlockTime'=>'required|numeric',
-            'paymentId'=>'required|string'
+            'unlockTime'=>'numeric',
+            'paymentId'=>'string'
         ]);
         return response()->json($this->walletService->transferFunds($request));
     }

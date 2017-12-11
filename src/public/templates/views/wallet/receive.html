@@ -5,12 +5,45 @@
     <strong flex md-truncate>Receive AEON</strong>
     <div flex></div>
 </md-toolbar>
-<div flex layout="column">
-    <md-card>
+<div flex layout="column" layout-align="center center">
+    <md-card style="width: 600px; max-width: 90%;">
         <div class="header">
             <strong>Receive Aeons</strong>
         </div>
-        <div>
+        <div layout="column">
+            <div flex-lt-md="1" layout-align="center center">
+                <div layout="row">
+                    <qrcode size="200" data="{{paymentUrl}}"></qrcode>
+                    <div class="text-c" layout="row" layout-align="center center" style="padding: 10px;">
+                        <h4>Use this QR code to quickly receive payments.</h4>
+                    </div>
+                </div>
+                <div style="word-break: break-all; padding: 10px 0;">
+                    <a style="font-size: 12px;" href="{{paymentUrl}}">{{paymentUrl}}</a>
+                </div>
+            </div>
+            <div flex="1">
+                <form name="receiveForm">
+                    <md-input-container style="width: 100%;">
+                        <label>Wallet Address</label>
+                        <input name="address" ng-model="receive.address" disabled/>
+                    </md-input-container>
+                    <md-input-container style="width: 100%;">
+                        <label>Amount (AEON)</label>
+                        <input name="amount" ng-model="receive.amount" pattern="^[0-9]+\.*[0-9]{0,12}$"/>
+                        <div class="validation-messages" ng-messages="receiveForm.amount.$error">
+                            <div ng-message="pattern" ng-show="receiveForm.amount.$error.pattern">Invalid Amount</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container style="width: 100%;">
+                        <label>Payment ID</label>
+                        <input name="paymentId" ng-model="receive.paymentId" pattern="[0-9a-f]{64}"/>
+                        <div class="validation-messages" ng-messages="receiveForm.paymentId.$error">
+                            <div ng-message="pattern" ng-show="receiveForm.paymentId.$error.pattern">Invalid Payment ID</div>
+                        </div>
+                    </md-input-container>
+                </form>
+            </div>
         </div>
     </md-card>
 </div>
