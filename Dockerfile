@@ -25,6 +25,12 @@ COPY ./src /var/www/html
 
 COPY ./conf /etc/apache2/sites-enabled/
 
+RUN /usr/sbin/a2ensite default-ssl
+RUN /usr/sbin/a2enmod ssl
+
+EXPOSE 80
+EXPOSE 443
+
 CMD chown www-data:www-data -R /var/www/html/storage \
     && chown www-data:www-data -R /var/www/html/bootstrap \
     && php artisan migrate && apache2-foreground

@@ -16,7 +16,6 @@ use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferRequest;
-use App\Models\Wallet;
 use App\Utils\error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -56,7 +55,7 @@ class WalletService
         }
 
         $timestamp = now()->timestamp;
-        $bcHeight = 0;
+        $bcHeight = 1;
         $transfers = self::EMPTY_TRANSFER;
         $res = $this->rpcService->setWallet(new SetWalletRequest(
             $seed, $timestamp, $bcHeight, $transfers
@@ -124,7 +123,6 @@ class WalletService
 
 
     public function refresh() {
-
         $address = Session::get('address');
         $refreshTime = time();
         $lock =  RefreshLockDAL::getLock($address);

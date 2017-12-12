@@ -8,31 +8,35 @@ services:
       - aeon-docker
       - redis
     environment:
-      - APP_URL=http://localhost
+      - APP_URL=https://localhost
       - APP_KEY=base64:8lMo2Gphbny1XQjS/Rv8gLdNCk5Saqt9agkYIfK7Il0=
       - APP_LOG=errorlog
-      - APP_RPC_URL=http://localhost:11191/json_rpc
+      - APP_RPC_URL=http://aeon-docker:11191/json_rpc
       - DB_CONNECTION=mongodb
-      - REDIS_HOST=localhost
+      - REDIS_HOST=redis
       - REDIS_PASSWORD=null
       - REDIS_PORT=6379
-      - MONGO_DB_HOST=localhost
+      - MONGO_DB_HOST=mongo
       - MONGO_DB_PORT=27017
       - MONGO_DB_DATABASE=aeon
       - MONGO_DB_USERNAME=aeon
       - MONGO_DB_PASSWORD=P@ssword1
       - MONGO_DB_MAIN_DB=admin
-    network_mode: host
     volumes:
       - ./conf:/etc/apache2/sites-enabled
+      - /home/aeon/ssl:/root/ssl
+    ports:
+      - 80:80
+      - 443:443
 
   aeon-docker:
     image: pushkar8723/aeon-docker
-    network_mode: host
+    environment:
+      - DAEMON_HOST=192.168.2.108
+      - DAEMON_PORT=11181
 
   redis:
     image: redis
-    network_mode: host
 
   mongo:
     image: mongo
@@ -42,5 +46,3 @@ services:
       - MONGO_INITDB_DATABASE=aeon
     ports:
       - 27017:27017
-    network_mode: host
-      
