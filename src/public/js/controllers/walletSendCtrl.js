@@ -23,7 +23,13 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
             }
 
             walletService.transfer($scope.send).then(function(data) {
-
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .title('AEON Sent Successfully')
+                        .textContent("Your transfer request has been submitted successfully. Your transaction hash is" + data.tx_hash + ". \
+                            A transaction takes about 10 to 20 minutes to process. You can use the above mentioned transaction hash \
+                            to check if your transaction was successful.")
+                )
             }, function (data) {
                 $mdToast.show($mdToast.simple().textContent(data.message));
             })

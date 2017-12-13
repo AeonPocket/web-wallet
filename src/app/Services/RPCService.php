@@ -46,4 +46,8 @@ class RPCService
     public function refresh(RefreshRequest $request) {
         return $this->httpService->request('refresh', $request);
     }
+
+    public function getBCHeight() {
+        return $this->httpService->request('bc_height', null);
+    }
 }

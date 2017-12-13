@@ -11,6 +11,7 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
         }
 
         $scope.init = function () {
+            $scope.errorMessage = null;
             walletService.getTransactions().then(function(data) {
                 if (data.status === 'success') {
                     $scope.transactions = data.transfers;

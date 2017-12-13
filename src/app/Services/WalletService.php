@@ -55,7 +55,7 @@ class WalletService
         }
 
         $timestamp = now()->timestamp;
-        $bcHeight = 1;
+        $bcHeight = $this->rpcService->getBCHeight()['height'];
         $transfers = self::EMPTY_TRANSFER;
         $res = $this->rpcService->setWallet(new SetWalletRequest(
             $seed, $timestamp, $bcHeight, $transfers
