@@ -102,6 +102,37 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         $rootScope.apiCount = 0;
 
         /**
+         * Wallet Object. Set on login and kept completely in
+         * memory for security.
+         */
+        $rootScope.wallet = null;
+
+        /**
+         * Getter for wallet.
+         *
+         * @returns {*|null}
+         */
+        $rootScope.getWallet = function() {
+            return $rootScope.wallet;
+        }
+
+        /**
+         * Setter for wallet.
+         *
+         * @param wallet
+         */
+        $rootScope.setWallet = function (wallet) {
+            $rootScope.wallet = wallet;
+        }
+
+        /**
+         * Clears the wallet object.
+         */
+        $rootScope.clearWallet = function () {
+            $rootScope.wallet = null;
+        }
+
+        /**
          * Signals start of an api call.
          */
         $rootScope.showProgress = function() {

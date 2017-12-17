@@ -3,7 +3,13 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
     function ($scope, $mdToast, walletService) {
 
         $scope.refresh = function() {
-            walletService.refresh().then(function() {
+            var request = {
+                address: $scope.getWallet().public_addr,
+                viewKey: $scope.getWallet().view.sec,
+                spendKey: $scope.getWallet().spend.sec
+            };
+
+            walletService.refresh(request).then(function() {
                 $scope.init();
             }, function (data) {
                 $mdToast.show($mdToast.simple().textContent(data.message));
@@ -12,7 +18,13 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
 
         $scope.init = function () {
             $scope.errorMessage = null;
-            walletService.getTransactions().then(function(data) {
+
+            var request = {
+                address: $scope.getWallet().public_addr,
+                viewKey: $scope.getWallet().view.sec
+            };
+
+            walletService.getTransactions(request).then(function(data) {
                 if (data.status === 'success') {
                     $scope.transactions = data.transfers;
                 } else {
@@ -20,7 +32,7 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
                 }
             });
 
-            walletService.getBalance().then(function(data) {
+            walletService.getBalance(request).then(function(data) {
                 $scope.setWalletParam('balance', data.balance);
             });
         }

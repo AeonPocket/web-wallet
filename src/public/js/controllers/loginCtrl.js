@@ -14,9 +14,18 @@ angular.module('aeonPocket').controller('loginCtrl', [
                 return;
             }
 
+            var wallet = create_address(mn_decode($scope.data.seed,'electrum'));
+            wallet.seed = $scope.data.seed;
+
+            var request = {
+                address: wallet.public_addr,
+                viewKey: wallet.view.sec
+            };
+
             // Call Login API and redirect user / show appropriate error.
-            userService.login($scope.data).then(function(data) {
+            userService.login(request).then(function(data) {
                 localStorage.setItem('address', data.address);
+                $scope.setWallet(wallet);
                 $state.go('wallet');
             }, function (data) {
                 $scope.loginForm.seed.$setValidity('validation', false);

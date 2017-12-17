@@ -20,6 +20,7 @@ angular.module('aeonPocket').controller('walletCtrl', [
         $scope.logout = function () {
             userService.logout().then(function() {
                 localStorage.clear();
+                $scope.clearWallet();
                 $state.go('home');
             });
         }

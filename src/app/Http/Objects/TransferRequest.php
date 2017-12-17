@@ -47,11 +47,25 @@ class TransferRequest
     public $payment_id;
 
     /**
-     * Wallet seed.
+     * Wallet address.
      *
      * @var String
      */
-    public $seed;
+    public $address;
+
+    /**
+     * Wallet private view key.
+     *
+     * @var String
+     */
+    public $view_key;
+
+    /**
+     * Wallet private spend key.
+     *
+     * @var String
+     */
+    public $spend_key;
 
     /**
      * Creation time of account.
@@ -76,26 +90,33 @@ class TransferRequest
 
     /**
      * TransferRequest constructor.
+     *
      * @param array $destinations
      * @param int $fee
      * @param int $mixin
      * @param int $unlock_time
      * @param String $payment_id
-     * @param String $seed
+     * @param String $address
+     * @param String $view_key
+     * @param String $spend_key
      * @param int $account_create_time
      * @param int $local_bc_height
      * @param String $transfers
      */
-    public function __construct(array $destinations, int $fee, int $mixin, int $unlock_time=null, String $payment_id=null, String $seed, int $account_create_time, int $local_bc_height, String $transfers)
+    public function __construct(array $destinations, $fee, $mixin, $unlock_time, $payment_id, $address, $view_key, $spend_key, $account_create_time, $local_bc_height, $transfers)
     {
         $this->destinations = $destinations;
         $this->fee = $fee;
         $this->mixin = $mixin;
         $this->unlock_time = $unlock_time;
         $this->payment_id = $payment_id;
-        $this->seed = $seed;
+        $this->address = $address;
+        $this->view_key = $view_key;
+        $this->spend_key = $spend_key;
         $this->account_create_time = $account_create_time;
         $this->local_bc_height = $local_bc_height;
         $this->transfers = $transfers;
     }
+
+
 }

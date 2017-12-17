@@ -7,14 +7,27 @@ angular.module('aeonPocket').controller('registerCtrl', [
         $scope.data = {};
 
         $scope.createNewWallet = function () {
-            userService.create().then(function(data) {
+            var seed = sc_reduce32(rand_32());
+            var wallet = create_address(seed);
+            var request = {
+                address: wallet.public_addr,
+                viewKey: wallet.view.sec
+            };
+
+            userService.create(request).then(function(data) {
                 $scope.step = 2;
-                $scope.seed = data.seed;
+                $scope.seed = mn_encode(seed, 'electrum');
             });
         }
 
         $scope.register = function () {
-            userService.create($scope.data).then(function(data) {
+            var wallet = create_address(mn_decode($scope.data.seed,'electrum'));
+            var request = {
+                address: wallet.public_addr,
+                viewKey: wallet.view.sec
+            }
+
+            userService.create(request).then(function(data) {
                 $mdToast.show($mdToast.simple('Account Created'));
                 $state.go('login');
             }, function (data) {

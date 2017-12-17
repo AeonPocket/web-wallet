@@ -34,20 +34,13 @@ class WalletService
         $this->rpcService = new RPCService();
     }
 
-    public function createNewWallet() {
-        $res = $this->rpcService->createWallet();
-        $wallet = $this->rpcService->setWallet(new SetWalletRequest(
-            $res['seed'], $res['account_create_time'], $res['local_bc_height'], $res['transfers']
-        ));
-        WalletDAL::createWallet($wallet['address'], $res['account_create_time'], $res['local_bc_height'], $res['transfers']);
-        return ["status" => "success", "seed" => $res['seed']];
-    }
-
-    public function restoreExistingWallet($seed) {
+    public function restoreExistingWallet($address, $viewKey) {
         $validator = Validator::make([
-            'seed' => $seed
+            'address' => $address,
+            'viewKey' => $viewKey
         ], [
-            'seed' => 'required'
+            'address' => 'required',
+            'viewKey' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -58,7 +51,7 @@ class WalletService
         $bcHeight = $this->rpcService->getBCHeight()['height'];
         $transfers = self::EMPTY_TRANSFER;
         $res = $this->rpcService->setWallet(new SetWalletRequest(
-            $seed, $timestamp, $bcHeight, $transfers
+            $address, $viewKey, $timestamp, $bcHeight, $transfers
         ));
 
         $validator = Validator::make([
@@ -72,15 +65,18 @@ class WalletService
         }
 
         WalletDAL::createWallet($res['address'], $timestamp, $bcHeight, $transfers);
-        return ["status" => "success", "seed" => $seed];
+        return ["status" => "success"];
     }
 
     public function setWallet(Request $request) {
-        $seed = $request->input('seed');
+        $address = $request->input('address');
+        $viewKey = $request->input('viewKey');
         $validator = Validator::make([
-            'seed' => $seed
+            'address' => $address,
+            'viewKey' => $viewKey
         ], [
-            'seed' => 'required'
+            'address' => 'required',
+            'viewKey' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -89,7 +85,7 @@ class WalletService
 
         // Get wallet address and keys using the seed.
         $res = $this->rpcService->setWallet(new SetWalletRequest(
-            $seed, now()->timestamp, 0, self::EMPTY_TRANSFER
+            $address, $viewKey, now()->timestamp, 0, self::EMPTY_TRANSFER
         ));
 
         // Get wallet transfers from db
@@ -103,16 +99,27 @@ class WalletService
         $request->session()->regenerate();
 
         // Set session variables
-        $request->session()->put('seed', $seed);
         $request->session()->put('address', $res['address']);
-        $request->session()->put('viewKey', $res['key']);
-        $request->session()->put('spendKey', $res['spend_key']);
     }
 
-    public function getBalance() {
-        $wallet = WalletDAL::getWallet(Session::get('address'));
+    public function getBalance(Request $request) {
+        $address = $request->input('address');
+        $viewKey = $request->input('viewKey');
+        $validator = Validator::make([
+            'address' => $address,
+            'viewKey' => $viewKey
+        ], [
+            'address' => 'required',
+            'viewKey' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        $wallet = WalletDAL::getWallet($address);
         $res= $this->rpcService->getBalance(new GetBalanceRequest(
-            Session::get('seed'), $wallet->createTime, $wallet->bcHeight, $wallet->transfers
+            $address, $viewKey, $wallet->createTime, $wallet->bcHeight, $wallet->transfers
         ));
         $result = new stdClass();
         $result->status = 'success';
@@ -122,8 +129,24 @@ class WalletService
     }
 
 
-    public function refresh() {
-        $address = Session::get('address');
+    public function refresh(Request $request) {
+        $address = $request->input('address');
+        $viewKey = $request->input('viewKey');
+        $spendKey = $request->input('spendKey');
+        $validator = Validator::make([
+            'address' => $address,
+            'viewKey' => $viewKey,
+            'spendKey' => $spendKey
+        ], [
+            'address' => 'required',
+            'viewKey' => 'required',
+            'spendKey' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
         $refreshTime = time();
         $lock =  RefreshLockDAL::getLock($address);
         $isLocked = true;
@@ -146,12 +169,10 @@ class WalletService
             $result = new stdClass();
             $result->refreshedOn = $refreshTime;
             RefreshLockDAL::Lock($address,$refreshTime);
-            $req = new RefreshRequest();
-            $req->local_bc_height = $wallet->getAttribute('bcHeight');
-            $req->transfers = $wallet->getAttribute('transfers');
-            $req->account_create_time = $wallet->getAttribute('createTime');
-            $req->seed = Session::get('seed');
-            $res = $this->rpcService->refresh($req);
+            $res = $this->rpcService->refresh(new RefreshRequest(
+                $address, $viewKey, $spendKey, $wallet->getAttribute('createTime'),
+                $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers')
+            ));
             //We update the DB with the new values local_bc_height,transfers,createTime
             WalletDAL::updateWallet($wallet, $res['local_bc_height'], $result->refreshedOn, $res['transfers']);
 //            RefreshLockDAL::Unlock($address);
@@ -162,16 +183,30 @@ class WalletService
         }
     }
 
-    public function getIncomingTransfers(){
+    public function getIncomingTransfers(Request $request){
+        $address = $request->input('address');
+        $viewKey = $request->input('viewKey');
+        $spendKey = $request->input('spendKey');
+        $validator = Validator::make([
+            'address' => $address,
+            'viewKey' => $viewKey,
+            'spendKey' => $spendKey,
+        ], [
+            'address' => 'required',
+            'viewKey' => 'required',
+            'spendKey' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
         $wallet = WalletDAL::getWallet(Session::get('address'));
         if(strcmp($wallet->getAttribute('transfers'),self::EMPTY_TRANSFER)){
-            $req = new GetTransactionsRequests();
-            $req->local_bc_height = $wallet->getAttribute('bcHeight');
-            $req->transfers = $wallet->getAttribute('transfers');
-            $req->account_create_time = $wallet->getAttribute('createTime');
-            $req->seed = Session::get('seed');
-            $req->transfer_type = self::TRANSFER_TYPE_ALL;
-            $res = $this->rpcService->getTransactions($req);
+            $res = $this->rpcService->getTransactions(new GetTransactionsRequests(
+                $address, $viewKey, $spendKey, $wallet->getAttribute('createTime'),
+                $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), self::TRANSFER_TYPE_ALL
+            ));
             $result = new stdClass();
             $result->status = "success";
             $result->transfers = [];
@@ -189,14 +224,33 @@ class WalletService
     }
 
     public function transferFunds(Request $request){
-        $wallet = WalletDAL::getWallet(Session::get('address'));
+        $address = $request->input('address');
+        $viewKey = $request->input('viewKey');
+        $spendKey = $request->input('spendKey');
+        $validator = Validator::make([
+            'address' => $address,
+            'viewKey' => $viewKey,
+            'spendKey' => $spendKey,
+        ], [
+            'address' => 'required',
+            'viewKey' => 'required',
+            'spendKey' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        $wallet = WalletDAL::getWallet($address);
         $req = new TransferRequest(
             $request->get('destinations'),
             self::TRANSFER_FEE,
             $request->get('mixin'),
             $request->get('unlockTime'),
             $request->get('paymentId'),
-            Session::get('seed'),
+            $address,
+            $viewKey,
+            $spendKey,
             $wallet->getAttribute('createTime'),
             $wallet->getAttribute('bcHeight'),
             $wallet->getAttribute('transfers'));

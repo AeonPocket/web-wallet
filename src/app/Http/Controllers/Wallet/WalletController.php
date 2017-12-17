@@ -15,11 +15,7 @@ class WalletController extends Controller
     }
 
     public function create(Request $request) {
-        if ($request->input('seed') != "" && $request->input('seed') != null) {
-            return $this->walletService->restoreExistingWallet($request->input('seed'));
-        } else {
-            return $this->walletService->createNewWallet();
-        }
+        return $this->walletService->restoreExistingWallet($request->input('address'), $request->input('viewKey'));
     }
 
     public function getBalance() {
@@ -32,23 +28,6 @@ class WalletController extends Controller
 
     public function refresh() {
         return response()->json($this->walletService->refresh());
-    }
-
-    public function getSeed(){
-        $res = new stdClass();
-        $res->seed = Session::get('seed');
-        $res->status = 'success';
-        return response()->json($res);
-    }
-
-    public function getKeys(){
-        $res = new stdClass();
-        $res->viewKey = Session::get('viewKey');
-        $res->spendKey = Session::get('spendKey');
-        $res->address = Session::get('address');
-        $res->seed = Session::get('seed');
-        $res->status = 'success';
-        return response()->json($res);
     }
 
     public function transferFunds(Request $request){

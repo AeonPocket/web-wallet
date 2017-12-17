@@ -41,19 +41,6 @@ angular.module('aeonPocket').service('walletService', [
             return deferred.promise;
         }
 
-        this.getKeys = function() {
-            var deferred = $q.defer();
-            $http({
-                method: 'GET',
-                url: '/api/v1/wallet/keys'
-            }).then(function (resp) {
-                deferred.resolve(resp.data);
-            }, function (resp) {
-                deferred.reject(resp.data);
-            });
-            return deferred.promise;
-        }
-
         this.transfer = function(data) {
             var deferred = $q.defer();
             $http({

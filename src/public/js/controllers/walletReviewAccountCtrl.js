@@ -1,12 +1,12 @@
 angular.module('aeonPocket').controller('walletReviewAccountCtrl', [
     '$scope', 'walletService',
     function ($scope, walletService) {
-        $scope.init = function () {
-            walletService.getKeys().then(function(data) {
-                $scope.data = data;
-            });
-        }
 
-        $scope.init();
+        $scope.data = {
+            address: $scope.getWallet().public_addr,
+            viewKey: $scope.getWallet().view.sec,
+            spendKey: $scope.getWallet().spend.sec,
+            seed: $scope.getWallet().seed
+        }
     }
 ])

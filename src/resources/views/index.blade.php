@@ -22,6 +22,16 @@
     <script src="bower_components/angular-qrcode/angular-qrcode.js"></script>
     <!-- htmlmin:ignore -->
 
+    <!-- libraries -->
+    <script src="js/lib/JSBigInt.js"></script>
+    <script src="js/lib/cnBase58.js"></script>
+    <!-- htmlmin:ignore -->
+    <script src="js/lib/module.js"></script>
+    <!-- htmlmin:ignore -->
+    <script src="js/lib/config.js"></script>
+    <script src="js/lib/cnUtilGen.js"></script>
+    <script src="js/lib/mnemonic.js"></script>
+
     <!--Config file-->
     <script src="js/app.js"></script>
 
