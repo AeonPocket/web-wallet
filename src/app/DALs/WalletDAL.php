@@ -26,9 +26,8 @@ class WalletDAL
         return Wallet::where('address', $address)->first();
     }
 
-    public static function updateWallet(Wallet $wallet, int $bcHeight, int $createTime, String $transfers){
+    public static function updateWallet(Wallet $wallet, int $bcHeight, String $transfers){
        $wallet->setAttribute('bcHeight',$bcHeight);
-       $wallet->setAttribute('createTime',$createTime);
        $wallet->setAttribute('transfers',$transfers);
        $wallet->save();
     }

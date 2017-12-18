@@ -175,7 +175,7 @@ class WalletService
                 $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers')
             ));
             //We update the DB with the new values local_bc_height,transfers,createTime
-            WalletDAL::updateWallet($wallet, $res['local_bc_height'], $result->refreshedOn, $res['transfers']);
+            WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers']);
 //            RefreshLockDAL::Unlock($address);
             $result->balance = $res['balance'];
             $result->currentHeight = $res['local_bc_height'];
