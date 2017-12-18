@@ -15,6 +15,7 @@ use App\Http\Objects\GetBalanceRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
+use App\Http\Objects\TransferDestination;
 use App\Http\Objects\TransferRequest;
 use App\Utils\error;
 use Illuminate\Http\Request;
@@ -238,11 +239,19 @@ class WalletService
             throw new ValidationException($validator);
         }
 
+        $destinations = [];
+        foreach ($request->get('destinations') as $dest) {
+            array_push($destinations, new TransferDestination(
+                $dest['address'],
+                intval($dest['amount']*(pow(10, 12)))
+            ));
+        }
+
         $wallet = WalletDAL::getWallet($address);
         $req = new TransferRequest(
-            $request->get('destinations'),
+            $destinations,
             self::TRANSFER_FEE,
-            $request->get('mixin'),
+            intval($request->get('mixin')),
             $request->get('unlockTime'),
             $request->get('paymentId'),
             $address,

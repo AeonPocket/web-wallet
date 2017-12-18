@@ -26,4 +26,17 @@ class TransferDestination
      * @var Integer
      */
     public $amount;
+
+    /**
+     * TransferDestination constructor.
+     * @param String $address
+     * @param int $amount
+     */
+    public function __construct($address, $amount)
+    {
+        $this->address = $address;
+        $this->amount = $amount;
+    }
+
+
 }
