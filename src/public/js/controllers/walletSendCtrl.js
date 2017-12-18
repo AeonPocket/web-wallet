@@ -22,12 +22,11 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
                 }
             }
 
-            var request = {
-                address: $scope.getWallet().public_addr,
-                viewKey: $scope.getWallet().view.sec,
-                spendKey: $scope.getWallet().spend.sec
-            }
-            walletService.transfer(request).then(function(data) {
+            $scope.send.address = $scope.getWallet().public_addr;
+            $scope.send.viewKey = $scope.getWallet().view.sec;
+            $scope.send.spendKey = $scope.getWallet().spend.sec;
+
+            walletService.transfer($scope.send).then(function(data) {
                 $mdDialog.show(
                     $mdDialog.alert()
                         .title('AEON Sent Successfully')

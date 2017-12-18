@@ -158,16 +158,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
          * @returns {boolean}
          */
         $rootScope.isAuthorized = function() {
-            return (localStorage.getItem('address') !== null);
-        }
-
-        /**
-         * Returns logged in user's name.
-         * @returns {String}
-         */
-        $rootScope.getUserName = function () {
-            var userObj = JSON.parse(localStorage.getItem('userObj'));
-            return userObj.name;
+            return ($rootScope.getWallet() !== null);
         }
 
         /**
@@ -224,12 +215,4 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
             // Signals end of an api call.
             $rootScope.hideProgress();
         });
-
-        userService.getAccount().then(function(data) {
-            localStorage.setItem('address', data.address);
-            $state.go('wallet');
-        }, function (data) {
-            localStorage.clear();
-            $state.go('home');
-        })
     }]);
