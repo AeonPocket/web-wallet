@@ -33,11 +33,9 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
     // Path: /wallet
     Route::group(['prefix' => 'wallet', 'namespace'=>'Wallet'], function(){
         Route::group(['middleware' => ['authentication']], function (){
-            Route::get('balance','WalletController@getBalance');
+            Route::post('balance','WalletController@getBalance');
             Route::post('refresh','WalletController@refresh');
-            Route::get('seed','WalletController@getSeed');
-            Route::get('keys','WalletController@getKeys');
-            Route::get('transactions','WalletController@getIncomingTransfers');
+            Route::post('transactions','WalletController@getIncomingTransfers');
             Route::post('transfer','WalletController@transferFunds');
         });
 

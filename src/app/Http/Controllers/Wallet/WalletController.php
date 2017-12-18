@@ -18,16 +18,16 @@ class WalletController extends Controller
         return $this->walletService->restoreExistingWallet($request->input('address'), $request->input('viewKey'));
     }
 
-    public function getBalance() {
-        return response()->json($this->walletService->getBalance());
+    public function getBalance(Request $request) {
+        return response()->json($this->walletService->getBalance($request));
     }
 
-    public function getIncomingTransfers(){
-        return response()->json($this->walletService->getIncomingTransfers());
+    public function getIncomingTransfers(Request $request){
+        return response()->json($this->walletService->getIncomingTransfers($request));
     }
 
-    public function refresh() {
-        return response()->json($this->walletService->refresh());
+    public function refresh(Request $request) {
+        return response()->json($this->walletService->refresh($request));
     }
 
     public function transferFunds(Request $request){

@@ -18,7 +18,7 @@ class Authentication
      */
     public function handle($request, Closure $next)
     {
-        if ($request->session()->get('seed') == null) {
+        if ($request->session()->get('address') == null) {
             throw error::getAuthorizationException(error::SESSION_EXPIRED);
         }
 

@@ -89,7 +89,7 @@ class WalletService
         ));
 
         // Get wallet transfers from db
-        $wallet = WalletDAL::getWallet($res['address']);
+        $wallet = WalletDAL::getWallet($address);
 
         if ($wallet == null) {
             throw error::getBadRequestException(error::WALLET_NOT_FOUND);
@@ -99,7 +99,7 @@ class WalletService
         $request->session()->regenerate();
 
         // Set session variables
-        $request->session()->put('address', $res['address']);
+        $request->session()->put('address', $address);
     }
 
     public function getBalance(Request $request) {
@@ -186,15 +186,12 @@ class WalletService
     public function getIncomingTransfers(Request $request){
         $address = $request->input('address');
         $viewKey = $request->input('viewKey');
-        $spendKey = $request->input('spendKey');
         $validator = Validator::make([
             'address' => $address,
-            'viewKey' => $viewKey,
-            'spendKey' => $spendKey,
+            'viewKey' => $viewKey
         ], [
             'address' => 'required',
-            'viewKey' => 'required',
-            'spendKey' => 'required'
+            'viewKey' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -204,7 +201,7 @@ class WalletService
         $wallet = WalletDAL::getWallet(Session::get('address'));
         if(strcmp($wallet->getAttribute('transfers'),self::EMPTY_TRANSFER)){
             $res = $this->rpcService->getTransactions(new GetTransactionsRequests(
-                $address, $viewKey, $spendKey, $wallet->getAttribute('createTime'),
+                $address, $viewKey, $wallet->getAttribute('createTime'),
                 $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), self::TRANSFER_TYPE_ALL
             ));
             $result = new stdClass();
