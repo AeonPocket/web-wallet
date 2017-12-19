@@ -13,12 +13,13 @@ use App\Models\Wallet;
 
 class WalletDAL
 {
-    public static function createWallet(String $address, int $timestamp, int $bcHeight, String $transfers) {
+    public static function createWallet(String $address, int $timestamp, int $bcHeight, String $transfers, String $keyImages) {
         $wallet = new Wallet();
         $wallet->address = $address;
         $wallet->bcHeight = $bcHeight;
         $wallet->transfers = $transfers;
         $wallet->createTime = $timestamp;
+        $wallet->keyImages = $keyImages;
         $wallet->save();
     }
 
@@ -26,9 +27,10 @@ class WalletDAL
         return Wallet::where('address', $address)->first();
     }
 
-    public static function updateWallet(Wallet $wallet, int $bcHeight, String $transfers){
-       $wallet->setAttribute('bcHeight',$bcHeight);
-       $wallet->setAttribute('transfers',$transfers);
+    public static function updateWallet(Wallet $wallet, int $bcHeight, String $transfers, String $keyImages){
+       $wallet->setAttribute('bcHeight', $bcHeight);
+       $wallet->setAttribute('transfers', $transfers);
+       $wallet->setAttribute('keyImages', $keyImages);
        $wallet->save();
     }
 }

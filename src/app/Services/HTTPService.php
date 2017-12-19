@@ -35,6 +35,10 @@ class HTTPService
 
         $response = json_decode($response->getBody(), true);
 
+        Log::info(json_encode($methodName));
+        Log::info(json_encode($obj));
+        Log::info(json_encode($response));
+
         if (array_has($response, 'result'))
             return $response['result'];
         else

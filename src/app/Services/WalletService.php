@@ -51,8 +51,9 @@ class WalletService
         $timestamp = now()->timestamp;
         $bcHeight = $this->rpcService->getBCHeight()['height'];
         $transfers = self::EMPTY_TRANSFER;
+        $keyImages = self::EMPTY_TRANSFER;
         $res = $this->rpcService->setWallet(new SetWalletRequest(
-            $address, $viewKey, $timestamp, $bcHeight, $transfers
+            $address, $viewKey, $timestamp, $bcHeight, $transfers, $keyImages
         ));
 
         $validator = Validator::make([
@@ -65,7 +66,7 @@ class WalletService
             throw new ValidationException($validator);
         }
 
-        WalletDAL::createWallet($res['address'], $timestamp, $bcHeight, $transfers);
+        WalletDAL::createWallet($res['address'], $timestamp, $bcHeight, $transfers, $keyImages);
         return ["status" => "success"];
     }
 
@@ -83,11 +84,6 @@ class WalletService
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
-
-        // Get wallet address and keys using the seed.
-        $res = $this->rpcService->setWallet(new SetWalletRequest(
-            $address, $viewKey, now()->timestamp, 0, self::EMPTY_TRANSFER
-        ));
 
         // Get wallet transfers from db
         $wallet = WalletDAL::getWallet($address);
@@ -120,7 +116,7 @@ class WalletService
 
         $wallet = WalletDAL::getWallet($address);
         $res= $this->rpcService->getBalance(new GetBalanceRequest(
-            $address, $viewKey, $wallet->createTime, $wallet->bcHeight, $wallet->transfers
+            $address, $viewKey, $wallet->createTime, $wallet->bcHeight, $wallet->transfers, $wallet->keyImages
         ));
         $result = new stdClass();
         $result->status = 'success';
@@ -172,10 +168,10 @@ class WalletService
             RefreshLockDAL::Lock($address,$refreshTime);
             $res = $this->rpcService->refresh(new RefreshRequest(
                 $address, $viewKey, $spendKey, $wallet->getAttribute('createTime'),
-                $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers')
+                $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), $wallet->getAttribute('keyImages')
             ));
             //We update the DB with the new values local_bc_height,transfers,createTime
-            WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers']);
+            WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images']);
 //            RefreshLockDAL::Unlock($address);
             $result->balance = $res['balance'];
             $result->currentHeight = $res['local_bc_height'];
@@ -203,7 +199,8 @@ class WalletService
         if(strcmp($wallet->getAttribute('transfers'),self::EMPTY_TRANSFER)){
             $res = $this->rpcService->getTransactions(new GetTransactionsRequests(
                 $address, $viewKey, $wallet->getAttribute('createTime'),
-                $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), self::TRANSFER_TYPE_ALL
+                $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), self::TRANSFER_TYPE_ALL,
+                $wallet->getAttribute('keyImages')
             ));
             $result = new stdClass();
             $result->status = "success";
@@ -259,10 +256,11 @@ class WalletService
             $spendKey,
             $wallet->getAttribute('createTime'),
             $wallet->getAttribute('bcHeight'),
-            $wallet->getAttribute('transfers'));
+            $wallet->getAttribute('transfers'),
+            $wallet->getAttribute('keyImages'));
         $res = $this->rpcService->transfer($req);
 
-        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers']);
+        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images']);
         $result = new stdClass();
         $request->tx_hash = $res['tx_hash'];
         return $result;

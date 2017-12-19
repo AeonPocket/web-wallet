@@ -55,6 +55,13 @@ class RefreshRequest
     public $transfers;
 
     /**
+     * Serialized key images of wallet.
+     *
+     * @var String
+     */
+    public $key_images;
+
+    /**
      * RefreshRequest constructor.
      *
      * @param String $address
@@ -64,7 +71,7 @@ class RefreshRequest
      * @param int $local_bc_height
      * @param String $transfers
      */
-    public function __construct($address, $view_key, $spend_key, $account_create_time, $local_bc_height, $transfers)
+    public function __construct($address, $view_key, $spend_key, $account_create_time, $local_bc_height, $transfers, $key_images)
     {
         $this->address = $address;
         $this->view_key = $view_key;
@@ -72,6 +79,7 @@ class RefreshRequest
         $this->account_create_time = $account_create_time;
         $this->local_bc_height = $local_bc_height;
         $this->transfers = $transfers;
+        $this->key_images = $key_images;
     }
 
 

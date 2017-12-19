@@ -33,4 +33,4 @@ EXPOSE 443
 
 CMD chown www-data:www-data -R /var/www/html/storage \
     && chown www-data:www-data -R /var/www/html/bootstrap \
-    && php artisan migrate && apache2-foreground
+    && php artisan migrate --force && apache2-foreground

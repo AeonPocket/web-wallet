@@ -49,6 +49,13 @@ class GetBalanceRequest
     public $transfers;
 
     /**
+     * Serialized key images of wallet.
+     *
+     * @var String
+     */
+    public $key_images;
+
+    /**
      * GetBalanceRequest constructor.
      *
      * @param $address
@@ -57,13 +64,14 @@ class GetBalanceRequest
      * @param $local_bc_height
      * @param $transfers
      */
-    public function __construct($address, $view_key, $account_create_time, $local_bc_height, $transfers)
+    public function __construct($address, $view_key, $account_create_time, $local_bc_height, $transfers, $key_images)
     {
         $this->address = $address;
         $this->view_key = $view_key;
         $this->account_create_time = $account_create_time;
         $this->local_bc_height = $local_bc_height;
         $this->transfers = $transfers;
+        $this->key_images = $key_images;
     }
 
 
