@@ -19,11 +19,20 @@ class UserController
     private $rpcService;
     private $walletService;
 
+    /**
+     * UserController constructor.
+     */
     public function __construct(){
         $this->rpcService = new RPCService();
         $this->walletService = new WalletService();
     }
 
+    /**
+     * Login API
+     *
+     * @param Request $request
+     * @return string
+     */
     public function login(Request $request) {
         $this->walletService->setWallet($request);
         $res = new stdClass();
@@ -32,13 +41,15 @@ class UserController
         return json_encode($res);
     }
 
+    /**
+     * Logout API
+     *
+     * @param Request $request
+     * @return array
+     */
     public function logout(Request $request) {
         $request->session()->flush();
         $request->session()->regenerate();
         return ["success" => true];
-    }
-
-    public function getAccount(Request $request) {
-        return ['address' => $request->session()->get('address')];
     }
 }

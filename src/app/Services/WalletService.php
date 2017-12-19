@@ -261,7 +261,10 @@ class WalletService
             $wallet->getAttribute('bcHeight'),
             $wallet->getAttribute('transfers'));
         $res = $this->rpcService->transfer($req);
+
+        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers']);
         $result = new stdClass();
-        return $res;
+        $request->tx_hash = $res['tx_hash'];
+        return $result;
     }
 }

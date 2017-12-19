@@ -26,22 +26,28 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
             $scope.send.viewKey = $scope.getWallet().view.sec;
             $scope.send.spendKey = $scope.getWallet().spend.sec;
 
-            walletService.transfer($scope.send).then(function(data) {
-                $mdDialog.show(
-                    $mdDialog.alert()
-                        .title('AEON Sent Successfully')
-                        .textContent("Your transfer request has been submitted successfully. Your transaction hash is" + data.tx_hash + ". \
+            walletService.refresh({
+                address: $scope.getWallet().public_addr,
+                viewKey: $scope.getWallet().view.sec,
+                spendKey: $scope.getWallet().spend.sec
+            }).finally(function() {
+                walletService.transfer($scope.send).then(function(data) {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .title('AEON Sent Successfully')
+                            .textContent("Your transfer request has been submitted successfully. Your transaction hash is" + data.tx_hash + ". \
                             A transaction takes about 10 to 20 minutes to process. You can use the above mentioned transaction hash \
                             to check if your transaction was successful.")
-                        .ok('OK')
-                )
+                            .ok('OK')
+                    );
 
-                $scope.send = {
-                    destinations: [{}]
-                };
-            }, function (data) {
-                $mdToast.show($mdToast.simple().textContent(data.message));
-            })
+                    $scope.send = {
+                        destinations: [{}]
+                    };
+                }, function (data) {
+                    $mdToast.show($mdToast.simple().textContent(data.message));
+                })
+            });
         }
     }
 ]);
