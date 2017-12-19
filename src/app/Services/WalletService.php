@@ -262,7 +262,7 @@ class WalletService
 
         WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images']);
         $result = new stdClass();
-        $request->tx_hash = $res['tx_hash'];
+        $result->tx_hash = $res['tx_hash'];
         return $result;
     }
 }
