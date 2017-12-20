@@ -47,6 +47,8 @@
     <!--Services-->
     <script src="js/services/userService.js"></script>
     <script src="js/services/walletService.js"></script>
+
+    <link rel="shortcut icon" href="images/aeon_pocket_logo.png" type="image/ico">
 </head>
 <body ng-app="aeonPocket" ng-cloak layout="column">
 <!--Progress bar to show ongoing API call-->
