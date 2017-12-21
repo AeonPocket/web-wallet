@@ -31,6 +31,8 @@
     <script src="js/lib/config.js"></script>
     <script src="js/lib/cnUtilGen.js"></script>
     <script src="js/lib/mnemonic.js"></script>
+    <script src="js/lib/nacl-fast-cn.js"></script>
+    <script src="js/lib/sha3.js"></script>
 
     <!--Config file-->
     <script src="js/app.js"></script>

@@ -25,6 +25,7 @@ services:
     volumes:
       - ./conf:/etc/apache2/sites-enabled
       - /home/aeon/ssl:/root/ssl
+      - ./src:/var/www/html
     ports:
       - 80:80
       - 443:443
