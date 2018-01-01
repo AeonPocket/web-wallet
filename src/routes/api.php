@@ -34,6 +34,8 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
         Route::group(['middleware' => ['authentication']], function (){
             Route::post('balance','WalletController@getBalance');
             Route::post('refresh','WalletController@refresh');
+            Route::post('getTransaction','WalletController@getTransaction');
+            Route::post('updateWallet','WalletController@updateWallet');
             Route::post('transactions','WalletController@getIncomingTransfers');
             Route::post('transfer','WalletController@transferFunds');
         });

@@ -27,10 +27,11 @@ class WalletDAL
         return Wallet::where('address', $address)->first();
     }
 
-    public static function updateWallet(Wallet $wallet, int $bcHeight, String $transfers, String $keyImages){
+    public static function updateWallet(Wallet $wallet, int $bcHeight, String $transfers, String $keyImages, Array $unprocessedTx=[]){
        $wallet->setAttribute('bcHeight', $bcHeight);
        $wallet->setAttribute('transfers', $transfers);
        $wallet->setAttribute('keyImages', $keyImages);
+       $wallet->setAttribute('unprocessedTxs', $unprocessedTx);
        $wallet->save();
     }
 }

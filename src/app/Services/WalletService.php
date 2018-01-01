@@ -12,11 +12,13 @@ namespace App\Services;
 use App\DALs\RefreshLockDAL;
 use App\DALs\WalletDAL;
 use App\Http\Objects\GetBalanceRequest;
+use app\Http\Objects\GetTransactionRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferDestination;
 use App\Http\Objects\TransferRequest;
+use app\Http\Objects\UpdateWalletRequest;
 use App\Utils\error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -125,59 +127,94 @@ class WalletService
         return $result;
     }
 
-
     public function refresh(Request $request) {
         $address = $request->input('address');
         $viewKey = $request->input('viewKey');
-        $spendKey = $request->input('spendKey');
         $validator = Validator::make([
             'address' => $address,
-            'viewKey' => $viewKey,
-            'spendKey' => $spendKey
+            'viewKey' => $viewKey
         ], [
             'address' => 'required',
-            'viewKey' => 'required',
-            'spendKey' => 'required'
+            'viewKey' => 'required'
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
 
-        $refreshTime = time();
-        $lock =  RefreshLockDAL::getLock($address);
-        $isLocked = true;
 
-        if($lock && $lock['isLocked'] ){
-            //Check if the lock can be released
-            if(($refreshTime - $lock['lastRefreshTime']) > 10*60){
-                RefreshLockDAL::Unlock($address);
-                $isLocked = false;
-            } else {
-                throw error::getBadRequestException(error::REFRESH_LOCKED);
-            }
-        } else {
-            $isLocked = false;
+        $wallet = WalletDAL::getWallet($address);
+        $res = $this->rpcService->refresh(new RefreshRequest(
+            $address, $viewKey, $wallet->getAttribute('createTime'),
+            $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), $wallet->getAttribute('keyImages')
+        ));
+
+        //We update the DB with the new values local_bc_height,transfers,createTime
+        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images'], $res['txs_hashes']);
+
+        $result = new stdClass();
+        $result->status = "success";
+        $result->txHashes = $res['txs_hashes'];
+        return $result;
+    }
+
+    public function getTransaction(Request $request) {
+        $txHash = $request->input('txHash');
+        $validator = Validator::make([
+            'txHash' => $txHash
+        ], [
+            'txHash' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
         }
-        if($isLocked){
-            throw error::getBadRequestException(error::REFRESH_LOCKED);
-        } else {
-            $wallet = WalletDAL::getWallet($address);
-            $result = new stdClass();
-            $result->refreshedOn = $refreshTime;
-            RefreshLockDAL::Lock($address,$refreshTime);
-            $res = $this->rpcService->refresh(new RefreshRequest(
-                $address, $viewKey, $spendKey, $wallet->getAttribute('createTime'),
-                $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), $wallet->getAttribute('keyImages')
-            ));
-            //We update the DB with the new values local_bc_height,transfers,createTime
-            WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images']);
-//            RefreshLockDAL::Unlock($address);
-            $result->balance = $res['balance'];
-            $result->currentHeight = $res['local_bc_height'];
-            $result->status = "success";
-            return $result;
+
+        $result = $this->rpcService->getTransaction(new GetTransactionRequest($txHash));
+        return $result;
+    }
+
+    public function updateWallet(Request $request) {
+        $address = $request->input('address');
+        $viewKey = $request->input('viewKey');
+        $txid = $request->input('txid');
+        $outputs = $request->input('outputs');
+        $validator = Validator::make([
+            'address' => $address,
+            'viewKey' => $viewKey,
+            'txid'    => $txid,
+            'outputs' => $outputs
+        ], [
+            'address' => 'required',
+            'viewKey' => 'required',
+            'txid'    => 'required',
+            'outputs' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
         }
+
+        $wallet = WalletDAL::getWallet($address);
+
+        $res = $this->rpcService->updateWallet(new UpdateWalletRequest(
+            $address, $viewKey, $wallet->bcHeight, $wallet->createTime,
+            $wallet->transfers, $wallet->keyImages, $txid, $outputs
+        ));
+
+        if (($key = array_search($txid, $wallet->unprocessedTxs)) !== false) {
+            unset($wallet->unprocessedTxs[$key]);
+        }
+
+        if (count($wallet->unprocessedTxs) == 0) {
+            $wallet->bcHeight += 1;
+        }
+
+        WalletDAL::updateWallet($wallet, $wallet->bcHeight, $res['transfers'], $res['key_images'], $wallet->unprocessedTxs);
+
+        $result = new stdClass();
+        $result->status = "success";
+        return $result;
     }
 
     public function getIncomingTransfers(Request $request){

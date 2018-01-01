@@ -10,10 +10,12 @@ namespace App\Services;
 
 
 use App\Http\Objects\GetBalanceRequest;
+use app\Http\Objects\GetTransactionRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferRequest;
+use app\Http\Objects\UpdateWalletRequest;
 
 class RPCService
 {
@@ -49,5 +51,13 @@ class RPCService
 
     public function getBCHeight() {
         return $this->httpService->request('bc_height', null);
+    }
+
+    public function getTransaction(GetTransactionRequest $request) {
+        return $this->httpService->request('get_transaction', $request);
+    }
+
+    public function updateWallet(UpdateWalletRequest $request) {
+        return $this->httpService->request('update_wallet', $request);
     }
 }
