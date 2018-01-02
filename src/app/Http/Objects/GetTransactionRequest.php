@@ -6,7 +6,7 @@
  * Time: 12:51 AM
  */
 
-namespace app\Http\Objects;
+namespace App\Http\Objects;
 
 
 class GetTransactionRequest

@@ -9,16 +9,15 @@
 namespace App\Services;
 
 
-use App\DALs\RefreshLockDAL;
 use App\DALs\WalletDAL;
 use App\Http\Objects\GetBalanceRequest;
-use app\Http\Objects\GetTransactionRequest;
+use App\Http\Objects\GetTransactionRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferDestination;
 use App\Http\Objects\TransferRequest;
-use app\Http\Objects\UpdateWalletRequest;
+use App\Http\Objects\UpdateWalletRequest;
 use App\Utils\error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -149,12 +148,17 @@ class WalletService
             $wallet->getAttribute('bcHeight'), $wallet->getAttribute('transfers'), $wallet->getAttribute('keyImages')
         ));
 
+        $txHashes = [];
+        if (isset($res['txs_hashes'])) {
+            $txHashes = $res['txs_hashes'];
+        }
+
         //We update the DB with the new values local_bc_height,transfers,createTime
-        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images'], $res['txs_hashes']);
+        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images'], $txHashes);
 
         $result = new stdClass();
         $result->status = "success";
-        $result->txHashes = $res['txs_hashes'];
+        $result->txHashes = $txHashes;
         return $result;
     }
 
@@ -170,7 +174,19 @@ class WalletService
             throw new ValidationException($validator);
         }
 
-        $result = $this->rpcService->getTransaction(new GetTransactionRequest($txHash));
+        $res = $this->rpcService->getTransaction(new GetTransactionRequest($txHash));
+
+        $result = new stdClass();
+        $result->txHash = $res['tx_hash'];
+        $result->txExtraPub = $res['tx_extra_pub'];
+        $result->outputs = [];
+
+        foreach ($res['outputs'] as $output) {
+            $txOut = new stdClass();
+            $txOut->key = $output['key_image'];
+            array_push($result->outputs, $txOut);
+        }
+
         return $result;
     }
 
@@ -197,14 +213,25 @@ class WalletService
 
         $wallet = WalletDAL::getWallet($address);
 
+        $reqOutputs = [];
+        foreach ($outputs as $output) {
+            array_push($reqOutputs, [
+                "tx_hash" => $txid,
+                "key_image" => $output['keyImage'],
+                "internal_index" => intval($output['index'])
+            ]);
+        }
+
         $res = $this->rpcService->updateWallet(new UpdateWalletRequest(
             $address, $viewKey, $wallet->bcHeight, $wallet->createTime,
-            $wallet->transfers, $wallet->keyImages, $txid, $outputs
+            $wallet->transfers, $wallet->keyImages, $txid, $reqOutputs
         ));
 
-        if (($key = array_search($txid, $wallet->unprocessedTxs)) !== false) {
-            unset($wallet->unprocessedTxs[$key]);
+        $unprocessedTxs = $wallet->unprocessedTxs;
+        if (($key = array_search($txid, $unprocessedTxs)) !== false) {
+            unset($unprocessedTxs[$key]);
         }
+        $wallet->unprocessedTxs = $unprocessedTxs;
 
         if (count($wallet->unprocessedTxs) == 0) {
             $wallet->bcHeight += 1;

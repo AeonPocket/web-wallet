@@ -6,7 +6,7 @@
  * Time: 1:09 AM
  */
 
-namespace app\Http\Objects;
+namespace App\Http\Objects;
 
 
 use phpDocumentor\Reflection\Types\Integer;

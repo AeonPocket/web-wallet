@@ -44,6 +44,34 @@ angular.module('aeonPocket').service('walletService', [
             return deferred.promise;
         }
 
+        this.getTransaction = function(data) {
+            var deferred = $q.defer();
+            $http({
+                method: 'POST',
+                url: '/api/v1/wallet/getTransaction',
+                data: data
+            }).then(function (resp) {
+                deferred.resolve(resp.data);
+            }, function (resp) {
+                deferred.reject(resp.data);
+            });
+            return deferred.promise;
+        }
+
+        this.updateWallet = function(data) {
+            var deferred = $q.defer();
+            $http({
+                method: 'POST',
+                url: '/api/v1/wallet/updateWallet',
+                data: data
+            }).then(function (resp) {
+                deferred.resolve(resp.data);
+            }, function (resp) {
+                deferred.reject(resp.data);
+            });
+            return deferred.promise;
+        }
+
         this.transfer = function(data) {
             var deferred = $q.defer();
             $http({

@@ -30,6 +30,14 @@ class WalletController extends Controller
         return response()->json($this->walletService->refresh($request));
     }
 
+    public function getTransaction(Request $request) {
+        return response()->json($this->walletService->getTransaction($request));
+    }
+
+    public function updateWallet(Request $request) {
+        return response()->json($this->walletService->updateWallet($request));
+    }
+
     public function transferFunds(Request $request){
      $this->validate($request,[
             'mixin' => 'required|numeric|max:10|min:3',
