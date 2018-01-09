@@ -24,30 +24,32 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
 
             $scope.send.address = $scope.getWallet().public_addr;
             $scope.send.viewKey = $scope.getWallet().view.sec;
-            $scope.send.spendKey = $scope.getWallet().spend.sec;
 
-            walletService.refresh({
-                address: $scope.getWallet().public_addr,
-                viewKey: $scope.getWallet().view.sec,
-                spendKey: $scope.getWallet().spend.sec
-            }).finally(function() {
-                walletService.transfer($scope.send).then(function(data) {
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                            .title('AEON Sent Successfully')
-                            .textContent("Your transfer request has been submitted successfully. Your transaction hash is " + data.tx_hash + ". \
-                            A transaction takes about 10 to 20 minutes to process. You can use the above mentioned transaction hash \
-                            to check if your transaction was successful.")
-                            .ok('OK')
-                    );
+            walletService.transfer($scope.send).then(function(data) {
+                var signed = cnUtil.construct_tx(
+                    $scope.getWallet(), data.sources,
+                    $scope.send.destinations.map(function(item) {
+                        item.amount = item.amount*Math.pow(10,12);
+                        return item;
+                    }),
+                    10000000000, null, false, null, 0, false
+                );
 
-                    $scope.send = {
-                        destinations: [{}]
-                    };
-                }, function (data) {
-                    $mdToast.show($mdToast.simple().textContent(data.message));
-                })
-            });
+                console.log(signed);
+
+                var raw_tx_and_hash = {};
+                if (signed.version === 1) {
+                    raw_tx_and_hash.raw = cnUtil.serialize_tx(signed);
+                    raw_tx_and_hash.hash = cnUtil.cn_fast_hash(cnUtil.serialize_tx(signed));
+                    raw_tx_and_hash.prvkey = signed.prvkey;
+                } else {
+                    raw_tx_and_hash = cnUtil.serialize_rct_tx_with_hash(signed);
+                }
+
+                console.log(raw_tx_and_hash);
+            }, function (data) {
+                $mdToast.show($mdToast.simple().textContent(data.message));
+            })
         }
     }
 ]);

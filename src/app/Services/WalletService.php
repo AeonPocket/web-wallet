@@ -288,12 +288,10 @@ class WalletService
         $spendKey = $request->input('spendKey');
         $validator = Validator::make([
             'address' => $address,
-            'viewKey' => $viewKey,
-            'spendKey' => $spendKey,
+            'viewKey' => $viewKey
         ], [
             'address' => 'required',
-            'viewKey' => 'required',
-            'spendKey' => 'required'
+            'viewKey' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -317,7 +315,6 @@ class WalletService
             $request->get('paymentId'),
             $address,
             $viewKey,
-            $spendKey,
             $wallet->getAttribute('createTime'),
             $wallet->getAttribute('bcHeight'),
             $wallet->getAttribute('transfers'),
@@ -326,7 +323,8 @@ class WalletService
 
         WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images']);
         $result = new stdClass();
-        $result->tx_hash = $res['tx_hash'];
+        $result->sources = $res['sources'];
+        $result->sucess = true;
         return $result;
     }
 }
