@@ -48,4 +48,8 @@ class WalletController extends Controller
         ]);
         return response()->json($this->walletService->transferFunds($request));
     }
+
+    public function sendTransaction(Request $request) {
+        return response()->json($this->walletService->sendTransaction($request));
+    }
 }

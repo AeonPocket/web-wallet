@@ -13,6 +13,7 @@ use App\Http\Objects\GetBalanceRequest;
 use app\Http\Objects\GetTransactionRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
+use App\Http\Objects\SendTransactionRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferRequest;
 use app\Http\Objects\UpdateWalletRequest;
@@ -59,5 +60,9 @@ class RPCService
 
     public function updateWallet(UpdateWalletRequest $request) {
         return $this->httpService->request('update_wallet', $request);
+    }
+
+    public function sendTransaction(SendTransactionRequest $request) {
+        return $this->httpService->request('send_raw_tx', $request);
     }
 }

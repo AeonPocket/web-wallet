@@ -14,6 +14,7 @@ use App\Http\Objects\GetBalanceRequest;
 use App\Http\Objects\GetTransactionRequest;
 use App\Http\Objects\GetTransactionsRequests;
 use App\Http\Objects\RefreshRequest;
+use App\Http\Objects\SendTransactionRequest;
 use App\Http\Objects\SetWalletRequest;
 use App\Http\Objects\TransferDestination;
 use App\Http\Objects\TransferRequest;
@@ -326,5 +327,20 @@ class WalletService
         $result->sources = $res['sources'];
         $result->sucess = true;
         return $result;
+    }
+
+    public function sendTransaction(Request $request) {
+        $txHex = $request->input('txHex');
+        $validator = Validator::make([
+            'txHex' => $txHex
+        ], [
+            'txHex' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $this->rpcService->sendTransaction(new SendTransactionRequest($txHex));
     }
 }
