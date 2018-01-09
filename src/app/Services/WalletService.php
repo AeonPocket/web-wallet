@@ -322,7 +322,6 @@ class WalletService
             $wallet->getAttribute('keyImages'));
         $res = $this->rpcService->transfer($req);
 
-        WalletDAL::updateWallet($wallet, $res['local_bc_height'], $res['transfers'], $res['key_images']);
         $result = new stdClass();
         $result->sources = $res['sources'];
         $result->sucess = true;
