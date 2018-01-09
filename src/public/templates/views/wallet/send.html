@@ -32,6 +32,12 @@
                         <md-button style="margin: 0;" ng-if="$index > 0" ng-click="remove($index)">Remove</md-button>
                     </md-card>
                     <md-button style="width: 100%; margin: 0;" ng-click="send.destinations.push({})">+ Add More</md-button>
+
+                    <md-input-container style="width: 100%;">
+                        <label>Fees</label>
+                        <input disabled ng-model="feesParsed" />
+                    </md-input-container>
+
                     <md-input-container style="width: 100%;">
                         <label>Payment ID</label>
                         <input ng-disabled="inProgress" name="paymentId" ng-model="send.paymentId" pattern="[0-9a-f]{64}"/>

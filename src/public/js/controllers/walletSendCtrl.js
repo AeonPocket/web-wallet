@@ -1,6 +1,10 @@
 angular.module('aeonPocket').controller('walletSendCtrl', [
     '$scope', '$mdToast', '$mdDialog', 'walletService',
     function ($scope, $mdToast, $mdDialog, walletService) {
+
+        $scope.fees = 10000000000;
+        $scope.feesParsed = ($scope.fees/Math.pow(10,12)).toFixed(12);
+
         $scope.send = {
             destinations: [{}]
         };
@@ -15,11 +19,21 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
                 return;
             }
 
+            var requiredAmount = 0;
+            var balance = $scope.wallet.balance;
+
             for (var i in $scope.send.destinations) {
+                requiredAmount += $scope.send.destinations[i].amount;
+
                 if ($scope.send.destinations[i].address === localStorage.getItem('address')) {
                     $mdToast.show($mdToast.simple().textContent('You cannot send to yourself.'));
                     return;
                 }
+            }
+
+            if (balance*Math.pow(10,12) < (requiredAmount*Math.pow(10,12)+$scope.fees)) {
+                $mdToast.showSimple("Insufficient balance.");
+                return;
             }
 
             $scope.send.address = $scope.getWallet().public_addr;
@@ -33,30 +47,57 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
                             item.amount = item.amount*Math.pow(10,12);
                             return item;
                         }),
-                        10000000000, $scope.send.paymentId, false, null, 0, false
+                        $scope.fees, $scope.send.paymentId, false, null, 0, false
                     );
 
                     console.log(signed);
 
-                    var raw_tx_and_hash = {};
+                    $scope.raw_tx_and_hash = {};
                     if (signed.version === 1) {
-                        raw_tx_and_hash.raw = cnUtil.serialize_tx(signed);
-                        raw_tx_and_hash.hash = cnUtil.cn_fast_hash(cnUtil.serialize_tx(signed));
-                        raw_tx_and_hash.prvkey = signed.prvkey;
+                        $scope.raw_tx_and_hash.raw = cnUtil.serialize_tx(signed);
+                        $scope.raw_tx_and_hash.hash = cnUtil.cn_fast_hash(cnUtil.serialize_tx(signed));
+                        $scope.raw_tx_and_hash.prvkey = signed.prvkey;
                     } else {
-                        raw_tx_and_hash = cnUtil.serialize_rct_tx_with_hash(signed);
+                        $scope.raw_tx_and_hash = cnUtil.serialize_rct_tx_with_hash(signed);
                     }
 
-                    console.log(raw_tx_and_hash);
+                    console.log($scope.raw_tx_and_hash);
                 } catch (e) {
-                    $mdDialog.alert()
-                        .title("Error!")
-                        .textContent(e)
-                        .ok("OK")
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .title("Error!")
+                            .textContent(e)
+                            .ok("OK")
+                    );
                     return;
                 }
 
+                walletService.sendTransaction({
+                    txHex: $scope.raw_tx_and_hash.raw
+                }).then(function (data) {
+                    if (data.status == 'OK') {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                                .title('AEON Sent Successfully')
+                                .textContent("Your transfer request has been submitted successfully. Your transaction hash is " + $scope.raw_tx_and_hash.hash + ". \
+                                                A transaction takes about 10 to 20 minutes to process. You can use the above mentioned transaction hash \
+                                                to check if your transaction was successful.")
+                                .ok('OK')
+                        );
 
+                        $scope.send = {
+                            destinations: [{}]
+                        };
+                    } else {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                                .title("Error!")
+                                .textContent("Transaction with hash " + $scope.raw_tx_and_hash.hash + " was rejected by daemon. \
+                                            Please sync the wallet and try again after sometime.")
+                                .ok("OK")
+                        );
+                    }
+                });
             }, function (data) {
                 $mdToast.show($mdToast.simple().textContent(data.message));
             })
