@@ -23,7 +23,7 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
             var balance = $scope.wallet.balance;
 
             for (var i in $scope.send.destinations) {
-                requiredAmount += $scope.send.destinations[i].amount;
+                requiredAmount += parseFloat($scope.send.destinations[i].amount)*Math.pow(10,12);
 
                 if ($scope.send.destinations[i].address === localStorage.getItem('address')) {
                     $mdToast.show($mdToast.simple().textContent('You cannot send to yourself.'));
@@ -31,7 +31,7 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
                 }
             }
 
-            if (balance*Math.pow(10,12) < (requiredAmount*Math.pow(10,12)+$scope.fees)) {
+            if (balance*Math.pow(10,12) < (requiredAmount+$scope.fees)) {
                 $mdToast.showSimple("Insufficient balance.");
                 return;
             }
@@ -41,13 +41,29 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
 
             walletService.transfer($scope.send).then(function(data) {
                 try {
+                    var dsts = $scope.send.destinations.map(function(item) {
+                        var dest = {};
+                        dest.amount = parseFloat(item.amount)*Math.pow(10,12);
+                        dest.address = item.address;
+                        return dest;
+                    });
+
+                    var sourceAmount = 0;
+                    for (var i in data.sources) {
+                        sourceAmount += data.sources[i].amount;
+                    }
+
+                    var remainingAmount = sourceAmount - (requiredAmount + $scope.fees);
+                    if (remainingAmount > 0) {
+                        dsts.push({
+                            address: $scope.getWallet().public_addr,
+                            amount: remainingAmount
+                        });
+                    }
+
                     var signed = cnUtil.construct_tx(
-                        $scope.getWallet(), data.sources,
-                        $scope.send.destinations.map(function(item) {
-                            item.amount = item.amount*Math.pow(10,12);
-                            return item;
-                        }),
-                        $scope.fees, $scope.send.paymentId, false, null, 0, false
+                        $scope.getWallet(), data.sources, dsts, $scope.fees, $scope.send.paymentId,
+                        false, null, 0, false
                     );
 
                     console.log(signed);
