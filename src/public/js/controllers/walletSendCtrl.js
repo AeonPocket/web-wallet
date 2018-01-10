@@ -62,7 +62,9 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
                     }
 
                     var signed = cnUtil.construct_tx(
-                        $scope.getWallet(), data.sources, dsts, $scope.fees, $scope.send.paymentId,
+                        $scope.getWallet(), data.sources,
+                        cnUtil.decompose_tx_destinations(dsts),
+                        $scope.fees, $scope.send.paymentId,
                         false, null, 0, false
                     );
 
