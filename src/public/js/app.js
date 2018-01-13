@@ -203,7 +203,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         /**
          * Event listener for api call start.
          */
-        $rootScope.$on('cfpLoadingBar:started', function () {
+        $rootScope.$on('cfpLoadingBar:loading', function () {
             // Signals start of an api call.
             $rootScope.showProgress();
         });
@@ -211,7 +211,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         /**
          * Event listener of api call end.
          */
-        $rootScope.$on('cfpLoadingBar:completed', function () {
+        $rootScope.$on('cfpLoadingBar:loaded', function () {
             // Signals end of an api call.
             $rootScope.hideProgress();
         });

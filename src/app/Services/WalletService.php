@@ -30,7 +30,7 @@ use stdClass;
 class WalletService
 {
     private $rpcService;
-    const EMPTY_TRANSFER = "22 serialization::archive 15 0 0 0 0";
+    const EMPTY_TRANSFER = "22 serialization::archive 16 0 0 0 0";
     const TRANSFER_TYPE_ALL = "all";
     const TRANSFER_FEE = 10000000000;
     public function __construct() {

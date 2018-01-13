@@ -28,6 +28,12 @@ COPY ./conf /etc/apache2/sites-enabled/
 RUN /usr/sbin/a2ensite default-ssl
 RUN /usr/sbin/a2enmod ssl
 
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+RUN composer install
+
+WORKDIR /var/www/html
+
 EXPOSE 80
 EXPOSE 443
 
