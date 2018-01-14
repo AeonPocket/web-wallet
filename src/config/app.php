@@ -104,7 +104,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', trim(file_get_contents(env('APP_KEY_FILE')))),
 
     'cipher' => 'AES-256-CBC',
 

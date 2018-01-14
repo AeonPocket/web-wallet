@@ -7,7 +7,7 @@ services:
       - DAEMON_HOST=192.168.2.110
       - DAEMON_PORT=11181
     deploy:
-      replicas: 3
+      replicas: 5
       update_config:
         delay: 10s
       restart_policy:
@@ -24,12 +24,18 @@ services:
 
   mongo:
     image: mongo
+    secrets:
+      - mongo_user
+      - mongo_pw
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=aeon
-      - MONGO_INITDB_ROOT_PASSWORD=P@ssword1
+      - MONGO_INITDB_ROOT_USERNAME_FILE=/run/secrets/mongo_user
+      - MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_pw
       - MONGO_INITDB_DATABASE=aeon
     volumes:
       - /home/aeon/db:/data/db
+      - ./mongo-seed:/docker-entrypoint-initdb.d
+    ports:
+      - 192.168.2.110:27017:27017
     deploy:
       replicas: 1
       restart_policy:
@@ -41,20 +47,25 @@ services:
       - mongo
       - aeon-docker
       - redis
+    secrets:
+      - mongo_user
+      - mongo_pw
+      - app_key
     environment:
       - APP_URL=https://localhost
-      - APP_KEY=base64:8lMo2Gphbny1XQjS/Rv8gLdNCk5Saqt9agkYIfK7Il0=
+      - APP_KEY_FILE=/run/secrets/app_key
       - APP_LOG=errorlog
       - APP_RPC_URL=http://aeon-docker:11191/json_rpc
       - DB_CONNECTION=mongodb
+      - SESSION_DRIVER=redis
       - REDIS_HOST=redis
       - REDIS_PASSWORD=null
       - REDIS_PORT=6379
       - MONGO_DB_HOST=mongo
       - MONGO_DB_PORT=27017
       - MONGO_DB_DATABASE=aeon
-      - MONGO_DB_USERNAME=aeon
-      - MONGO_DB_PASSWORD=P@ssword1
+      - MONGO_DB_USERNAME_FILE=/run/secrets/mongo_user
+      - MONGO_DB_PASSWORD_FILE=/run/secrets/mongo_pw
       - MONGO_DB_MAIN_DB=admin
     volumes:
       - ./conf:/etc/apache2/sites-enabled
@@ -67,3 +78,11 @@ services:
       restart_policy:
         condition: on-failure
         max_attempts: 3
+
+secrets:
+  mongo_user:
+    external: true
+  mongo_pw:
+    external: true
+  app_key:
+    external: true
