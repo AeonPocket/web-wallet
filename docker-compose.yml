@@ -1,6 +1,40 @@
 version: '3.1'
 
 services:
+  aeon-docker:
+    image: aeonpocket/rpc
+    environment:
+      - DAEMON_HOST=192.168.2.110
+      - DAEMON_PORT=11181
+    deploy:
+      replicas: 3
+      update_config:
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  redis:
+    image: redis
+    volumes:
+      - /home/aeon/redis:/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=aeon
+      - MONGO_INITDB_ROOT_PASSWORD=P@ssword1
+      - MONGO_INITDB_DATABASE=aeon
+    volumes:
+      - /home/aeon/db:/data/db
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
   php-wallet:
     image: aeonpocket/web-wallet
     depends_on:
@@ -32,41 +66,4 @@ services:
       replicas: 3
       restart_policy:
         condition: on-failure
-
-  aeon-docker:
-    image: aeonpocket/rpc
-    environment:
-      - DAEMON_HOST=192.168.2.110
-      - DAEMON_PORT=11181
-    deploy:
-      replicas: 3
-      update_config:
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-
-  redis:
-    image: redis
-    volumes:
-      - /home/aeon/redis:/data
-    deploy:
-      replicas: 1
-      update_config:
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-
-  mongo:
-    image: mongo
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=aeon
-      - MONGO_INITDB_ROOT_PASSWORD=P@ssword1
-      - MONGO_INITDB_DATABASE=aeon
-    volumes:
-      - /home/aeon/db:/data/db
-    deploy:
-      replicas: 1
-      update_config:
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+        max_attempts: 3
