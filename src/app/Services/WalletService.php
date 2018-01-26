@@ -87,7 +87,7 @@ class WalletService
             throw new ValidationException($validator);
         }
 
-        // Get wallet transfers from db
+        // Get wallet from db
         $wallet = WalletDAL::getWallet($address);
 
         if ($wallet == null) {
@@ -286,7 +286,6 @@ class WalletService
     public function transferFunds(Request $request){
         $address = $request->input('address');
         $viewKey = $request->input('viewKey');
-        $spendKey = $request->input('spendKey');
         $validator = Validator::make([
             'address' => $address,
             'viewKey' => $viewKey
@@ -341,5 +340,36 @@ class WalletService
         }
 
         return $this->rpcService->sendTransaction(new SendTransactionRequest($txHex));
+    }
+
+    public function deleteWallet(Request $request) {
+        $address = $request->input('address');
+        $viewKey = $request->input('viewKey');
+        $validator = Validator::make([
+            'address' => $address,
+            'viewKey' => $viewKey
+        ], [
+            'address' => 'required',
+            'viewKey' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        $wallet = WalletDAL::getWallet($address);
+
+        $this->rpcService->setWallet(new SetWalletRequest(
+            $wallet->address, $viewKey, $wallet->createTime,
+            $wallet->bcHeight, $wallet->transfers, $wallet->keyImages
+        ));
+
+        if ($wallet != null) {
+            WalletDAL::deleteWallet($wallet);
+        } else {
+            throw error::getBadRequestException(error::WALLET_NOT_FOUND);
+        }
+
+        return ['success' => true];
     }
 }

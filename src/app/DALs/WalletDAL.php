@@ -34,4 +34,8 @@ class WalletDAL
        $wallet->setAttribute('unprocessedTxs', $unprocessedTx);
        $wallet->save();
     }
+
+    public static function deleteWallet(Wallet $wallet) {
+        $wallet->delete();
+    }
 }

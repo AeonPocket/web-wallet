@@ -39,6 +39,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
             Route::post('transactions','WalletController@getIncomingTransfers');
             Route::post('transfer','WalletController@transferFunds');
             Route::post('sendTransaction','WalletController@sendTransaction');
+            Route::post('deleteWallet','WalletController@deleteWallet');
         });
 
         Route::group(['middleware' => ['open']], function (){
