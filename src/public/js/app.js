@@ -23,6 +23,10 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 controller: 'registerCtrl',
                 data: {requireLogin: false}
             })
+            .state('support', {
+                url: '/support',
+                templateUrl: 'templates/views/support.html'
+            })
             .state('wallet', {
                 url: '/wallet',
                 templateUrl: 'templates/views/wallet.html',
@@ -43,7 +47,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 data: {requireLogin: true}
             })
             .state('wallet.receive', {
-                url: '/send',
+                url: '/receive',
                 templateUrl: 'templates/views/wallet/receive.html',
                 controller: 'walletReceiveCtrl',
                 data: {requireLogin: true}
@@ -167,13 +171,13 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
 
             // Authorization Check
-            if (toState.data.requireLogin && !$rootScope.isAuthorized()) {
+            if (toState.data && toState.data.requireLogin && !$rootScope.isAuthorized()) {
                 // if login is required and user is unauthorized,
                 // redirect to login page.
                 event.preventDefault();
                 $state.go('home');
                 return;
-            } else if (!toState.data.requireLogin && $rootScope.isAuthorized()) {
+            } else if (toState.data && toState.data.requireLogin == false && $rootScope.isAuthorized()) {
                 // if page is for only guest user and user is logged in,
                 // redirect to search page.
                 event.preventDefault();
