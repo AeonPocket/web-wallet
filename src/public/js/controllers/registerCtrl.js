@@ -8,16 +8,9 @@ angular.module('aeonPocket').controller('registerCtrl', [
 
         $scope.createNewWallet = function () {
             var seed = sc_reduce32(rand_32());
-            var wallet = create_address(seed);
-            var request = {
-                address: wallet.public_addr,
-                viewKey: wallet.view.sec
-            };
 
-            userService.create(request).then(function(data) {
-                $scope.step = 2;
-                $scope.seed = mn_encode(seed, 'electrum');
-            });
+            $scope.step = 2;
+            $scope.seed = mn_encode(seed, 'electrum');
         }
 
         $scope.register = function () {
@@ -37,7 +30,15 @@ angular.module('aeonPocket').controller('registerCtrl', [
         
         $scope.confirmSeed = function () {
             if ($scope.seed === $scope.confirm.seed) {
-                $state.go('login');
+                var wallet = create_address(mn_decode($scope.seed,'electrum'));
+                var request = {
+                    address: wallet.public_addr,
+                    viewKey: wallet.view.sec
+                };
+                userService.create(request).then(function(data) {
+                    $mdToast.showSimple("Account Created");
+                    $state.go('login');
+                });
             } else {
                 $mdToast.show($mdToast.simple('Seed mismatch. Try again.'));
             }
