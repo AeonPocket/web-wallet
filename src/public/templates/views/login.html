@@ -24,8 +24,9 @@
                         <div ng-message="validation" ng-show="loginForm.seed.$error.validation">{{errorMessage}}</div>
                     </div>
                 </md-input-container>
-
-                <!--Submit Button-->
+                <div>
+                    By using our service you agree to our <a href="#!/terms">terms of service.</a><br/>
+                </div>
                 <md-button ng-disabled="inProgress" ng-disabled="inProgress" class="md-primary md-raised" type="submimt">Login</md-button><br/>
 
                 <div class="text-center">
@@ -34,5 +35,12 @@
 
             </md-card>
         </form>
+    </div>
+    <div class="footer" layout="row">
+        <div flex>&copy; AEON Pocket, 2017</div>
+        <div>
+            <a href="#!/terms">Terms of Service</a>
+            <a href="#!/privacy">Privacy Policy</a>
+        </div>
     </div>
 </div>

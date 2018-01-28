@@ -9,7 +9,7 @@
             <img src="images/aeon_pocket_logo.png" style="max-height: 64px; vertical-align: middle;" />
             AEON Pocket
         </h1>
-        <md-card class="loginBox" ng-show="step==0">
+        <md-card class="loginBox" ng-show="step==0" style="overflow-y: auto;">
             <div layout-gt-sm="row" >
                 <div flex layout="row" ng-click="createNewWallet()">
                     <md-button ng-disabled="inProgress" flex class="hero-button md-raised">
@@ -26,7 +26,7 @@
             </div>
         </md-card>
 
-        <md-card class="loginBox" ng-show="step==1">
+        <md-card class="loginBox" ng-show="step==1" style="overflow-y: auto;">
             <form name="loginForm" layout="column" ng-submit="register()">
                 <div layout="column">
                     <md-input-container>
@@ -37,7 +37,9 @@
                             <div ng-message="validation" ng-show="loginForm.seed.$error.validation">{{errorMessage}}</div>
                         </div>
                     </md-input-container>
-
+                    <div>
+                        By using our service you agree to our <a href="#!/terms">terms of service.</a><br/>
+                    </div>
                     <md-button ng-disabled="inProgress" class="md-primary md-raised" type="submit">Register</md-button><br/>
 
                     <div class="text-center">
@@ -47,7 +49,7 @@
             </form>
         </md-card>
 
-        <md-card class="loginBox" ng-show="step==2">
+        <md-card class="loginBox" ng-show="step==2" style="overflow-y: auto;">
             <div layout-gt-sm="column" >
                 <div class="text-center">
                     <strong>Your private login key:</strong><br/>
@@ -69,9 +71,19 @@
                         <label>Type your private login key to confirm</label>
                         <textarea rows="5" ng-model="confirm.seed"></textarea>
                     </md-input-container>
+                    <div>
+                        By using our service you agree to our <a href="#!/terms">terms of service.</a><br/>
+                    </div>
                     <md-button class="md-raised md-primary" ng-click="confirmSeed()">Confirm my Private login key</md-button>
                 </div>
             </div>
         </md-card>
+    </div>
+    <div class="footer" layout="row">
+        <div flex>&copy; AEON Pocket, 2017</div>
+        <div>
+            <a href="#!/terms">Terms of Service</a>
+            <a href="#!/privacy">Privacy Policy</a>
+        </div>
     </div>
 </div>

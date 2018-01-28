@@ -44,6 +44,15 @@ md-dialog-content {
     display: block;
 }
 
+.loginPage .tnc {
+    width: 1100px;
+    max-width: 90%;
+    margin: 10px auto !important;
+    display: block;
+    padding: 10px;
+    text-align: justify;
+}
+
 .loginPage .container h3 {
     margin: 0;
     padding: 10px;

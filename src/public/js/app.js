@@ -27,6 +27,14 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 url: '/support',
                 templateUrl: 'templates/views/support.html'
             })
+            .state('tnc', {
+                url: '/terms',
+                templateUrl: 'templates/views/tnc.html'
+            })
+            .state('privacy', {
+                url: '/privacy',
+                templateUrl: 'templates/views/privacy.html'
+            })
             .state('wallet', {
                 url: '/wallet',
                 templateUrl: 'templates/views/wallet.html',
