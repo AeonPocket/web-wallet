@@ -7,8 +7,10 @@
 </md-toolbar>
 <div flex layout="column" layout-align="center center">
     <md-card style="width: 600px; max-width: 90%;">
-        <div class="header">
+        <div class="header" layout="row">
             <strong>Send AEON</strong>
+            <div flex></div>
+            <span>{{wallet.balance.toFixed(12)}} AEON</span>
         </div>
         <div layout="column" style="padding: 0;">
             <form name="sendForm" layout="column" ng-submit="submit()">
