@@ -1,0 +1,16 @@
+{
+  "name": "AEON Pocket",
+  "short_name": "AEON Pocket",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff",
+  "theme_color": "#16444f",
+  "icons": [
+    {
+      "src": "/images/aeon_pocket_logo.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ]
+}

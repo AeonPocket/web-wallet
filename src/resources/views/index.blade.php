@@ -52,6 +52,7 @@
     <script src="js/services/walletService.js"></script>
     <script src="js/services/cryptonatorService.js"></script>
 
+    <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="images/aeon_pocket_logo.png" type="image/ico">
 </head>
 <body ng-app="aeonPocket" ng-cloak layout="column">
@@ -60,6 +61,17 @@
 
 <!--View container-->
 <div layout="column" flex ui-view></div>
+
+<!--Registering service worker-->
+<script type="text/javascript">
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then(function() {
+                console.log("Service Worker Registered");
+            });
+    }
+</script>
 
 <!--Message to show if JS is disabled on client's machine.-->
 <noscript>
