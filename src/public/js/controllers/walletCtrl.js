@@ -26,6 +26,7 @@ angular.module('aeonPocket').controller('walletCtrl', [
 
             if ($scope.getIntervalId() != null) {
                 clearInterval($scope.getIntervalId());
+                $scope.setIntervalId(null);
             }
         }
 

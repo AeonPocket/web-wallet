@@ -31,7 +31,8 @@
                 </div>
                 <div layout-align="start center">
                     <label class="standalone">Balance</label><br/>
-                    {{wallet.balance.toFixed(12)}} <strong>AEON</strong>
+                    {{wallet.balance.toFixed(12)}} <strong>AEON</strong><br/>
+                    <span style="font-size: 11px; color: #777;">{{wallet.syncHeight}} / {{wallet.blockHeight}}</span>
                 </div>
             </div>
         </div>

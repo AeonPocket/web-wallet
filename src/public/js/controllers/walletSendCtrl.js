@@ -94,8 +94,10 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
                 $mdDialog.show(
                     $mdDialog.confirm()
                         .title('Are you sure you want to make this transaction?')
-                        .htmlContent('Transaction ID: ' + $scope.raw_tx_and_hash.hash + '<br/>' +
-                            'Transaction Description:<br/><pre>' + JSON.stringify($scope.raw_tx_and_hash.signed, null, 4) + '</pre>')
+                        .htmlContent(
+                            '<strong>Transaction ID:</strong> ' + $scope.raw_tx_and_hash.hash + '<br/>' +
+                            '<strong>Private Key:</strong> ' + $scope.raw_tx_and_hash.prvkey + '<br/>' +
+                            '<strong>Transaction Description:</strong><br/><pre>' + JSON.stringify($scope.raw_tx_and_hash.signed, null, 4) + '</pre>')
                         .ok('Yes')
                         .cancel('No')
                 ).then(function () {
@@ -124,6 +126,8 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
                                     .ok("OK")
                             );
                         }
+                    }, function (data) {
+                        $mdToast.show($mdToast.simple().textContent(data.message));
                     });
                 });
             }, function (data) {

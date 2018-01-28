@@ -7,7 +7,13 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
         $scope.showSyncDialog = function () {
             if (!$scope.isDialogOpen) {
                 $mdDialog.show({
-                    templateUrl: 'templates/views/partials/dialogs/syncDialog.html'
+                    templateUrl: 'templates/views/partials/dialogs/syncDialog.html',
+                    locals: {
+                        wallet: $scope.wallet
+                    },
+                    controller: ['$scope', 'wallet', function ($scope, wallet) {
+                        $scope.wallet = wallet;
+                    }]
                 });
                 $scope.isDialogOpen = true;
             }
@@ -71,6 +77,9 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
 
             $scope.showSyncDialog();
             walletService.refresh(request).then(function(data) {
+                $scope.setWalletParam('syncHeight', data.syncHeight);
+                $scope.setWalletParam('blockHeight', data.blockHeight);
+
                 if (data.txHashes && data.txHashes.length > 0) {
                     $scope.processTxs(data.txHashes, 0);
                 } else {
@@ -101,6 +110,8 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
 
             walletService.getBalance(request).then(function(data) {
                 $scope.setWalletParam('balance', data.balance);
+                $scope.setWalletParam('syncHeight', data.syncHeight);
+                $scope.setWalletParam('blockHeight', data.blockHeight);
             });
 
             if ($scope.getIntervalId() == null) {

@@ -124,6 +124,8 @@ class WalletService
         $result->status = 'success';
         Log::info($res['balance']);
         $result->balance = $res['balance']/(pow(10, 12));
+        $result->syncHeight = $wallet->bcHeight;
+        $result->blockHeight = $this->rpcService->getBCHeight()['height'];
         return $result;
     }
 
@@ -160,6 +162,8 @@ class WalletService
         $result = new stdClass();
         $result->status = "success";
         $result->txHashes = $txHashes;
+        $result->syncHeight = $res['local_bc_height'];
+        $result->blockHeight = $this->rpcService->getBCHeight()['height'];
         return $result;
     }
 

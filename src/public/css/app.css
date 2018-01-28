@@ -6,6 +6,17 @@ body {
     background: linear-gradient(160deg, transparent 80vh, #F3F4F5 80vh, white 100vh), linear-gradient(to bottom, #F3F4F5 160px, white 50vh), #16444f;
 }
 
+pre {
+    background-color: #f2f2f2;
+    padding: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+md-dialog-content {
+    word-break: break-all;
+}
+
 .loginPage {
     background: url(../images/bg4.png);
     overflow-y: auto;
