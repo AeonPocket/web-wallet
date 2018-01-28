@@ -1,6 +1,6 @@
 angular.module('aeonPocket').controller('walletHomeCtrl', [
-    '$scope', '$mdToast', '$mdDialog', '$q', 'walletService',
-    function ($scope, $mdToast, $mdDialog, $q, walletService) {
+    '$scope', '$mdToast', '$mdDialog', '$q', 'walletService', 'cryptonatorService',
+    function ($scope, $mdToast, $mdDialog, $q, walletService, cryptonatorService) {
 
         $scope.isDialogOpen = false;
 
@@ -112,6 +112,14 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
                 $scope.setWalletParam('balance', data.balance);
                 $scope.setWalletParam('syncHeight', data.syncHeight);
                 $scope.setWalletParam('blockHeight', data.blockHeight);
+            });
+
+            cryptonatorService.getUsdRate().then(function (data) {
+                $scope.setExchangeParam('USD', parseFloat(data.ticker.price).toFixed(2));
+            });
+
+            cryptonatorService.getEurRate().then(function (data) {
+                $scope.setExchangeParam('EUR', parseFloat(data.ticker.price).toFixed(2));
             });
 
             if ($scope.getIntervalId() == null) {

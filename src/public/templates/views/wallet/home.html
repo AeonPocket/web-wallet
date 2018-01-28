@@ -35,6 +35,26 @@
                     <span style="font-size: 11px; color: #777;">{{wallet.syncHeight}} / {{wallet.blockHeight}}</span>
                 </div>
             </div>
+            <br/>
+            <div layout="row" ng-if="exchange.USD && exchange.EUR">
+                <div>
+                    <i class="material-icons medium-icon">credit_card</i>
+                </div>
+                <div layout-align="start center">
+                    <label class="standalone">Exchange Rate</label><br/>
+                    {{(wallet.balance.toFixed(12)*exchange.USD).toFixed(2)}} <strong>USD</strong> /
+                    {{(wallet.balance.toFixed(12)*exchange.EUR).toFixed(2)}} <strong>EUR</strong>
+                    <span style="font-size: 11px; color: #777;">
+                        ( {{exchange.USD}} <strong>USD/AEON</strong> |
+                        {{exchange.EUR}} <strong>EUR/AEON</strong> )
+                    </span>
+                    <br/>
+                    <span style="font-size: 11px; color: #777;">
+                        powered by
+                        <strong><a href="https://www.cryptonator.com" target="_blank">Cryptonator</a></strong>
+                    </span>
+                </div>
+            </div>
         </div>
     </md-card>
     <md-card flex>

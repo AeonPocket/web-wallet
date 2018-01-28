@@ -50,6 +50,7 @@
     <!--Services-->
     <script src="js/services/userService.js"></script>
     <script src="js/services/walletService.js"></script>
+    <script src="js/services/cryptonatorService.js"></script>
 
     <link rel="shortcut icon" href="images/aeon_pocket_logo.png" type="image/ico">
 </head>

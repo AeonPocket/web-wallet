@@ -3,9 +3,14 @@ angular.module('aeonPocket').controller('walletCtrl', [
     function ($scope, $state, $mdSidenav, walletService, userService) {
 
         $scope.wallet = {};
+        $scope.exchange = {};
 
         $scope.setWalletParam = function (key, value) {
             $scope.wallet[key] = value;
+        }
+
+        $scope.setExchangeParam = function (key, value) {
+            $scope.exchange[key] = value;
         }
 
         $scope.toggleSideNav = function() {
