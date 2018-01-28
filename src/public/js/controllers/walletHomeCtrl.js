@@ -102,6 +102,13 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
             walletService.getBalance(request).then(function(data) {
                 $scope.setWalletParam('balance', data.balance);
             });
+
+            if ($scope.getIntervalId() == null) {
+                $scope.setIntervalId(setInterval(function () {
+                    $scope.refresh();
+                }, 30*60*1000));
+                $scope.refresh();
+            }
         }
 
         $scope.init();

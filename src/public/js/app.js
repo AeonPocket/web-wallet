@@ -112,6 +112,28 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         $rootScope.wallet = null;
 
         /**
+         * Variable to store interval id for auto-sync of wallet
+         * @type {number}
+         */
+        $rootScope.intervalId = null;
+
+        /**
+         * Getter for interval id
+         * @returns {number}
+         */
+        $rootScope.getIntervalId = function () {
+            return $rootScope.intervalId;
+        }
+
+        /**
+         * Setter for interval id
+         * @param value
+         */
+        $rootScope.setIntervalId = function (value) {
+            $rootScope.intervalId = value;
+        }
+
+        /**
          * Getter for wallet.
          *
          * @returns {*|null}

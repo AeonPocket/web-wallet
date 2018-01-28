@@ -23,6 +23,10 @@ angular.module('aeonPocket').controller('walletCtrl', [
                 $scope.clearWallet();
                 $state.go('home');
             });
+
+            if ($scope.getIntervalId() != null) {
+                clearInterval($scope.getIntervalId());
+            }
         }
 
         $scope.init = function () {

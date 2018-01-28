@@ -22,8 +22,8 @@ angular.module('aeonPocket').controller('walletReceiveCtrl', [
 
         $scope.$watch('receive', function(receive) {
             var payementUrl = 'aeon:'+localStorage.getItem('address');
-            payementUrl += (receive.paymentId)?('tx_payment_id='+receive.paymentId):'';
-            payementUrl += (receive.amount)?('tx_amount='+receive.amount):'';
+            payementUrl += (receive.paymentId)?('&tx_payment_id='+receive.paymentId):'';
+            payementUrl += (receive.amount)?('&tx_amount='+receive.amount):'';
             $scope.paymentUrl = payementUrl;
         }, true)
 
