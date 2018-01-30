@@ -1,0 +1,52 @@
+version: '3.1'
+
+services:
+  aeon-docker:
+    image: aeonpocket/rpc
+    environment:
+      - DAEMON_HOST=192.168.2.110
+      - DAEMON_PORT=11181
+
+  redis:
+    image: redis
+
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=aeon
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=aeon
+    volumes:
+      - ./mongo-seed:/docker-entrypoint-initdb.d
+    ports:
+      - 27017:27017
+
+  php-wallet:
+    image: aeonpocket/web-wallet
+    depends_on:
+      - mongo
+      - aeon-docker
+      - redis
+    environment:
+      - APP_URL=https://localhost
+      - APP_KEY=base64:qsVQ0YUyXhzMGqW6fE6BRg6u2uIqCACdoj5tsKbVW58=
+      - APP_KEY_FILE=/dev/null
+      - APP_LOG=errorlog
+      - APP_RPC_URL=http://aeon-docker:11191/json_rpc
+      - DB_CONNECTION=mongodb
+      - SESSION_DRIVER=redis
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+      - MONGO_DB_HOST=mongo
+      - MONGO_DB_PORT=27017
+      - MONGO_DB_DATABASE=aeon
+      - MONGO_DB_USERNAME=aeon
+      - MONGO_DB_USERNAME_FILE=/dev/null
+      - MONGO_DB_PASSWORD=password
+      - MONGO_DB_PASSWORD_FILE=/dev/null
+      - MONGO_DB_MAIN_DB=admin
+    volumes:
+      - ./conf:/etc/apache2/sites-enabled
+    ports:
+      - 80:80
