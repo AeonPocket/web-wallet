@@ -64,7 +64,7 @@ function mn_decode(str, wordset_name) {
     // Decode mnemonic
     for (var i = 0; i < wlist.length; i += 3) {
         var w1, w2, w3;
-        if (wordset.prefix_len === 0) {
+        if (true || wordset.prefix_len === 0) {
             w1 = wordset.words.indexOf(wlist[i]);
             w2 = wordset.words.indexOf(wlist[i + 1]);
             w3 = wordset.words.indexOf(wlist[i + 2]);

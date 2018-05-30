@@ -1,6 +1,6 @@
 angular.module('aeonPocket').controller('loginCtrl', [
-    '$scope', '$state', 'userService',
-    function($scope, $state, userService) {
+    '$scope', '$state', '$mdDialog', 'userService',
+    function($scope, $state, $mdDialog, userService) {
         
         $scope.data = {};
         
@@ -14,7 +14,26 @@ angular.module('aeonPocket').controller('loginCtrl', [
                 return;
             }
 
-            var wallet = create_address(mn_decode($scope.data.seed,'electrum'));
+            var wallet;
+
+            if ($scope.data.seed.split(' ').length === 24) {
+                wallet = create_address(mn_decode($scope.data.seed,'electrum'));
+                var newSeed = mn_encode(wallet.spend.sec, 'english');
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .title('Seed updated')
+                        .htmlContent(
+                            '<strong>You were using an old seed, which has been deprecated.<br/>' +
+                            'Please note down your new 25 word seed.<br/>' +
+                            'Use your new seed to login.</strong><br/>' +
+                            '<pre class="newSeed">' + newSeed + '</pre>')
+                        .ok('Got it')
+                );
+                return;
+            } else {
+                wallet = create_address(mn_decode($scope.data.seed,'english'));
+            }
+
             wallet.seed = $scope.data.seed;
 
             var request = {

@@ -234,3 +234,9 @@ md-card > div {
 .footer a {
     color: #2c88a0;
 }
+
+.newSeed {
+    white-space: normal;
+    word-break: normal;
+    max-width: 450px;
+}
