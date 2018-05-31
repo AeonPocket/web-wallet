@@ -13,20 +13,11 @@ angular.module('aeonPocket').controller('walletCtrl', [
             $scope.exchange[key] = value;
         }
 
-        $scope.toggleSideNav = function() {
-            $mdSidenav('left').toggle();
-        }
-
-        $scope.go = function(toState) {
-            $state.go(toState);
-            $mdSidenav('left').close();
-        }
-
         $scope.logout = function () {
             userService.logout().then(function() {
                 localStorage.clear();
                 $scope.clearWallet();
-                $state.go('home');
+                $state.go('public.home');
             });
 
             if ($scope.getIntervalId() != null) {

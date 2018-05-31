@@ -6,34 +6,38 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         function ($stateProvider, $urlRouterProvider, $mdThemingProvider, cfpLoadingBarProvider) {
 
             // Various States
-            $stateProvider.state('home', {
+            $stateProvider.state('public', {
+                url: '/public',
+                templateUrl: 'templates/views/public.html'
+            })
+            .state('public.home', {
                 url: '/home',
-                templateUrl: 'templates/views/home.html',
+                templateUrl: 'templates/views/public/home.html',
                 data: {requireLogin: false}
             })
-            .state('login', {
+            .state('public.login', {
                 url: '/login',
-                templateUrl: 'templates/views/login.html',
+                templateUrl: 'templates/views/public/login.html',
                 controller: 'loginCtrl',
                 data: {requireLogin: false}
             })
-            .state('register', {
+            .state('public.register', {
                 url: '/register',
-                templateUrl: 'templates/views/register.html',
+                templateUrl: 'templates/views/public/register.html',
                 controller: 'registerCtrl',
                 data: {requireLogin: false}
             })
-            .state('support', {
+            .state('public.support', {
                 url: '/support',
-                templateUrl: 'templates/views/support.html'
+                templateUrl: 'templates/views/public/support.html'
             })
-            .state('tnc', {
+            .state('public.tnc', {
                 url: '/terms',
-                templateUrl: 'templates/views/tnc.html'
+                templateUrl: 'templates/views/public/tnc.html'
             })
-            .state('privacy', {
+            .state('public.privacy', {
                 url: '/privacy',
-                templateUrl: 'templates/views/privacy.html'
+                templateUrl: 'templates/views/public/privacy.html'
             })
             .state('wallet', {
                 url: '/wallet',
@@ -68,7 +72,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
             });
 
             // Default page.
-            $urlRouterProvider.otherwise('/home');
+            $urlRouterProvider.otherwise('/public/home');
 
             // Theme config.
             $mdThemingProvider.definePalette('starSearchPalette', {
@@ -99,7 +103,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
             cfpLoadingBarProvider.includeSpinner = false;
         }
     ])
-    .run(['$rootScope', '$state', '$mdDialog', 'userService', function ($rootScope, $state, $mdDialog, userService) {
+    .run(['$rootScope', '$state', '$mdDialog', '$mdSidenav', 'userService', function ($rootScope, $state, $mdDialog, $mdSidenav, userService) {
 
         /**
          * Variable to track if any api call is ongoing.
@@ -188,6 +192,23 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         }
 
         /**
+         * Toggles the side nav.
+         */
+        $rootScope.toggleSideNav = function() {
+            $mdSidenav('left').toggle();
+        }
+
+        /**
+         * Redirects to the given state.
+         *
+         * @param toState
+         */
+        $rootScope.go = function(toState) {
+            $state.go(toState);
+            $mdSidenav('left').close();
+        }
+
+        /**
          * Checks if user is already logged in.
          * @returns {boolean}
          */
@@ -205,7 +226,7 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
                 // if login is required and user is unauthorized,
                 // redirect to login page.
                 event.preventDefault();
-                $state.go('home');
+                $state.go('public.home');
                 return;
             } else if (toState.data && toState.data.requireLogin == false && $rootScope.isAuthorized()) {
                 // if page is for only guest user and user is logged in,

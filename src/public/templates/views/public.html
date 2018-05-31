@@ -1,8 +1,7 @@
-<section layout="row" flex>
+<section class="loginPage" layout="row" flex>
     <md-sidenav
             class="md-sidenav-left"
             md-component-id="left"
-            md-is-locked-open="$mdMedia('gt-md')"
             md-whiteframe="4"
             layout="column">
         <md-toolbar class="md-theme-indigo md-tall md-whiteframe-2dp" style="height: 192px; max-height: 192px; background: url(images/bg4.png);">
@@ -15,24 +14,24 @@
         </md-toolbar>
         <md-content flex layout="column">
             <md-menu-item>
-                <md-button ng-click="go('wallet.home')">
+                <md-button ng-click="go('public.home')">
                     <i class="material-icons">home</i>
                     Home
                 </md-button>
             </md-menu-item>
-            <md-menu-item>
+            <md-menu-item ng-if="isAuthorized()">
                 <md-button ng-click="go('wallet.send')">
                     <i class="material-icons">send</i>
                     Send
                 </md-button>
             </md-menu-item>
-            <md-menu-item>
+            <md-menu-item ng-if="isAuthorized()">
                 <md-button ng-click="go('wallet.receive')">
                     <i class="material-icons">file_download</i>
                     Receive
                 </md-button>
             </md-menu-item>
-            <md-menu-item>
+            <md-menu-item ng-if="isAuthorized()">
                 <md-button ng-click="go('wallet.reviewAccount')">
                     <i class="material-icons">vpn_key</i>
                     Review Account
@@ -44,7 +43,7 @@
                     Support
                 </md-button>
             </md-menu-item>
-            <md-menu-item>
+            <md-menu-item ng-if="isAuthorized()">
                 <md-button ng-click="logout()">
                     <i class="material-icons">power_settings_new</i>
                     Logout
@@ -53,12 +52,21 @@
             <div flex></div>
             <div style="padding: 5px 10px; border-top: 1px solid #ccc;">
                 &copy; Aeon Pocket, 2017<br/>
-                <a href="#!/public/terms">Terms of Service</a> |
-                <a href="#!/public/privacy">Privacy Policy</a>
+                <a href="#!/public/terms" ng-click="toggleSideNav()">Terms of Service</a> |
+                <a href="#!/public/privacy" ng-click="toggleSideNav()">Privacy Policy</a>
             </div>
         </md-content>
     </md-sidenav>
-    <div flex layout="column" ui-view>
-
+    <div flex layout="column">
+        <md-toolbar style="background-color: transparent;" layout="row" layout-align="start center">
+            <md-button class="md-icon-button" ng-click="toggleSideNav()">
+                <i class="material-icons" style="vertical-align: middle; color: #fff;">menu</i>
+            </md-button>
+            <div flex></div>
+        </md-toolbar>
+        <div flex layout="column" ui-view style="overflow: auto;"></div>
+        <div class="footer" layout="row">
+            <div flex>&copy; AEON Pocket, 2017</div>
+        </div>
     </div>
 </section>

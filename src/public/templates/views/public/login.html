@@ -1,0 +1,32 @@
+<div layout="column" flex layout-align="center center">
+    <!--Login Form-->
+    <form name="loginForm" ng-submit="login()">
+
+        <h1 class="text-center" style="color: #fff;">
+            <img src="images/aeon_pocket_logo.png" style="max-height: 64px; vertical-align: middle;" />
+            AEON Pocket
+        </h1>
+        <md-card class="loginBox">
+            <!--<md-icon class="logo md-whiteframe-1dp" md-svg-src="images/logo.svg"></md-icon>-->
+
+            <!--Username Input Field-->
+            <md-input-container>
+                <label>Your Private Login Key (Mnemonic Seed)</label>
+                <textarea ng-disabled="inProgress" required rows="5" ng-disabled="inProgress" name="seed" ng-model="data.seed"></textarea>
+                <div class="validation-messages" ng-messages="loginForm.seed.$error">
+                    <div ng-message="required" ng-show="loginForm.seed.$error.required">Required</div>
+                    <div ng-message="validation" ng-show="loginForm.seed.$error.validation">{{errorMessage}}</div>
+                </div>
+            </md-input-container>
+            <div>
+                By using our service you agree to our <a href="#!/public/terms">terms of service.</a><br/>
+            </div>
+            <md-button ng-disabled="inProgress" ng-disabled="inProgress" class="md-primary md-raised" type="submimt">Login</md-button><br/>
+
+            <div class="text-center">
+                <a href="#!/public/register">Don't have an account? Register Here.</a>
+            </div>
+
+        </md-card>
+    </form>
+</div>
