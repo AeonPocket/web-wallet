@@ -3,5 +3,6 @@ var config = {
     coinSymbol: 'AEON',
     coinName: 'Aeon',
     coinUriPrefix: 'aeon:',
-    addressPrefix: 0xB2
+    addressPrefix: 0xB2,
+    feePerKb: 1000000000
 };

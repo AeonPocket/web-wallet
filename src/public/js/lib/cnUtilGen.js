@@ -1632,7 +1632,7 @@ var cnUtilGen = function(initConfig) {
     this.construct_tx = function(keys, sources, dsts, fee_amount, payment_id, pid_encrypt, realDestViewKey, unlock_time, rct) {
         //we move payment ID stuff here, because we need txkey to encrypt
         var txkey = this.random_keypair();
-        console.log(txkey);
+        // console.log(txkey);
         var extra = '';
         if (payment_id) {
             if (pid_encrypt && payment_id.length !== INTEGRATED_ID_SIZE * 2) {
