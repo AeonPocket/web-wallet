@@ -37,7 +37,7 @@ class WalletService
         $this->rpcService = new RPCService();
     }
 
-    public function restoreExistingWallet($address, $viewKey) {
+    public function restoreExistingWallet($address, $viewKey, $viewOnly) {
         $validator = Validator::make([
             'address' => $address,
             'viewKey' => $viewKey
@@ -68,7 +68,7 @@ class WalletService
             throw new ValidationException($validator);
         }
 
-        WalletDAL::createWallet($res['address'], $timestamp, $bcHeight, $transfers, $keyImages);
+        WalletDAL::createWallet($res['address'], $timestamp, $bcHeight, $transfers, $keyImages, $viewOnly);
         return ["status" => "success"];
     }
 
@@ -99,6 +99,7 @@ class WalletService
 
         // Set session variables
         $request->session()->put('address', $address);
+        $request->session()->put('viewOnly', $wallet->viewOnly);
     }
 
     public function getBalance(Request $request) {

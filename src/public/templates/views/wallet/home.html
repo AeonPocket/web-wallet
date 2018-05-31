@@ -24,8 +24,8 @@
                     {{wallet.address}}
                 </div>
             </div>
-            <br/>
-            <div layout="row">
+            <br ng-if="!isViewOnlyWallet()" />
+            <div ng-if="!isViewOnlyWallet()" layout="row">
                 <div>
                     <i class="material-icons medium-icon">account_balance</i>
                 </div>
@@ -35,8 +35,8 @@
                     <span style="font-size: 11px; color: #777;">{{wallet.syncHeight}} / {{wallet.blockHeight}}</span>
                 </div>
             </div>
-            <br/>
-            <div layout="row" ng-if="exchange.USD && exchange.EUR">
+            <br ng-if="!isViewOnlyWallet()" />
+            <div ng-if="!isViewOnlyWallet()" layout="row" ng-if="exchange.USD && exchange.EUR">
                 <div>
                     <i class="material-icons medium-icon">credit_card</i>
                 </div>

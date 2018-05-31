@@ -18,6 +18,14 @@
                 </md-button>
             </div>
         </div>
+        <div layout-gt-sm="row">
+            <div flex layout="row">
+                <md-button ng-disabled="inProgress" flex class="hero-button md-raised" ng-click="step=3">
+                    <i class="material-icons large-icon">visibility</i><br/>
+                    Create View only Wallet
+                </md-button>
+            </div>
+        </div>
     </md-card>
 
     <md-card class="loginBox" ng-show="step==1" style="overflow-y: auto;">
@@ -71,5 +79,34 @@
                 <md-button class="md-raised md-primary" ng-click="confirmSeed()">Confirm my Private login key</md-button>
             </div>
         </div>
+    </md-card>
+
+    <md-card class="loginBox" ng-show="step==3" style="overflow-y: auto;">
+        <form name="viewWalletForm" layout="column" ng-submit="registerViewOnlyWallet()">
+            <div layout="column">
+                <md-input-container>
+                    <label>Your Wallet Address</label>
+                    <input ng-disabled="inProgress" required name="address" ng-model="viewWallet.address" />
+                    <div class="validation-messages" ng-messages="viewWalletForm.address.$error">
+                        <div ng-message="required" ng-show="viewWalletForm.address.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container>
+                    <label>Wallet View Key</label>
+                    <input required ng-disabled="inProgress" name="viewKey" ng-model="viewWallet.viewKey" />
+                    <div class="validation-messages" ng-messages="viewWalletForm.viewKey.$error">
+                        <div ng-message="required" ng-show="viewWalletForm.viewKey.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+                <div>
+                    By using our service you agree to our <a href="#!/public/terms">terms of service.</a><br/>
+                </div>
+                <md-button ng-disabled="inProgress" class="md-primary md-raised" type="submit">Register</md-button><br/>
+
+                <div class="text-center">
+                    <a href="#!/public/login">Already registered? Login Here.</a>
+                </div>
+            </div>
+        </form>
     </md-card>
 </div>

@@ -38,6 +38,7 @@ class UserController
         $res = new stdClass();
         $res->success = true;
         $res->address = $request->session()->get('address');
+        $res->viewOnly = $request->session()->get('viewOnly');
         return json_encode($res);
     }
 

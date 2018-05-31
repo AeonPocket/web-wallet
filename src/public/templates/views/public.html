@@ -19,7 +19,7 @@
                     Home
                 </md-button>
             </md-menu-item>
-            <md-menu-item ng-if="isAuthorized()">
+            <md-menu-item ng-if="isAuthorized() && !isViewOnlyWallet()">
                 <md-button ng-click="go('wallet.send')">
                     <i class="material-icons">send</i>
                     Send

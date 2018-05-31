@@ -1,32 +1,62 @@
 <div layout="column" flex layout-align="center center">
     <!--Login Form-->
-    <form name="loginForm" ng-submit="login()">
+    <h1 class="text-center" style="color: #fff;">
+        <img src="images/aeon_pocket_logo.png" style="max-height: 64px; vertical-align: middle;" />
+        AEON Pocket
+    </h1>
+    <md-card class="loginBox" style="padding: 0;">
+        <md-tabs md-stretch-tabs="always" md-no-pagination md-swipe-content md-dynamic-height>
+            <md-tab label="Seed">
+                <form name="loginForm" ng-submit="login()">
+                    <div layout="column" style="padding: 10px;">
+                        <!--Username Input Field-->
+                        <md-input-container>
+                            <label>Your Private Login Key (Mnemonic Seed)</label>
+                            <textarea ng-disabled="inProgress" required rows="4" ng-disabled="inProgress" name="seed" ng-model="data.seed"></textarea>
+                            <div class="validation-messages" ng-messages="loginForm.seed.$error">
+                                <div ng-message="required" ng-show="loginForm.seed.$error.required">Required</div>
+                                <div ng-message="validation" ng-show="loginForm.seed.$error.validation">{{errorMessage}}</div>
+                            </div>
+                        </md-input-container>
+                        <div>
+                            By using our service you agree to our <a href="#!/public/terms">terms of service.</a><br/>
+                        </div>
+                        <md-button ng-disabled="inProgress" ng-disabled="inProgress" class="md-primary md-raised" type="submimt">Login</md-button><br/>
 
-        <h1 class="text-center" style="color: #fff;">
-            <img src="images/aeon_pocket_logo.png" style="max-height: 64px; vertical-align: middle;" />
-            AEON Pocket
-        </h1>
-        <md-card class="loginBox">
-            <!--<md-icon class="logo md-whiteframe-1dp" md-svg-src="images/logo.svg"></md-icon>-->
+                        <div class="text-center">
+                            <a href="#!/public/register">Don't have an account? Register Here.</a>
+                        </div>
+                    </div>
+                </form>
+            </md-tab>
+            <md-tab label="View Only">
+                <form name="viewWalletForm" layout="column" ng-submit="loginViewOnlyWallet()">
+                    <div layout="column" style="padding: 10px;">
+                        <md-input-container>
+                            <label>Your Wallet Address</label>
+                            <input ng-disabled="inProgress" required name="address" ng-model="viewWallet.address" />
+                            <div class="validation-messages" ng-messages="viewWalletForm.address.$error">
+                                <div ng-message="required" ng-show="viewWalletForm.address.$error.required">Required</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Wallet View Key</label>
+                            <input required ng-disabled="inProgress" name="viewKey" ng-model="viewWallet.viewKey" />
+                            <div class="validation-messages" ng-messages="viewWalletForm.viewKey.$error">
+                                <div ng-message="required" ng-show="viewWalletForm.viewKey.$error.required">Required</div>
+                            </div>
+                        </md-input-container>
+                        <div>
+                            By using our service you agree to our <a href="#!/public/terms">terms of service.</a><br/>
+                        </div>
+                        <md-button ng-disabled="inProgress" class="md-primary md-raised" type="submit">Login</md-button><br/>
 
-            <!--Username Input Field-->
-            <md-input-container>
-                <label>Your Private Login Key (Mnemonic Seed)</label>
-                <textarea ng-disabled="inProgress" required rows="5" ng-disabled="inProgress" name="seed" ng-model="data.seed"></textarea>
-                <div class="validation-messages" ng-messages="loginForm.seed.$error">
-                    <div ng-message="required" ng-show="loginForm.seed.$error.required">Required</div>
-                    <div ng-message="validation" ng-show="loginForm.seed.$error.validation">{{errorMessage}}</div>
-                </div>
-            </md-input-container>
-            <div>
-                By using our service you agree to our <a href="#!/public/terms">terms of service.</a><br/>
-            </div>
-            <md-button ng-disabled="inProgress" ng-disabled="inProgress" class="md-primary md-raised" type="submimt">Login</md-button><br/>
-
-            <div class="text-center">
-                <a href="#!/public/register">Don't have an account? Register Here.</a>
-            </div>
-
-        </md-card>
-    </form>
+                        <div class="text-center">
+                            <a href="#!/public/register">Don't have an account? Register Here.</a>
+                        </div>
+                    </div>
+                </form>
+            </md-tab>
+        </md-tabs>
+    </md-card>
 </div>

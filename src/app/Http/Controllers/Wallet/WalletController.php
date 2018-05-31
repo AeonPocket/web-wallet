@@ -15,7 +15,11 @@ class WalletController extends Controller
     }
 
     public function create(Request $request) {
-        return $this->walletService->restoreExistingWallet($request->input('address'), $request->input('viewKey'));
+        return $this->walletService->restoreExistingWallet(
+            $request->input('address'),
+            $request->input('viewKey'),
+            $request->input('viewOnly')
+        );
     }
 
     public function getBalance(Request $request) {

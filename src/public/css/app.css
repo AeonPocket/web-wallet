@@ -241,3 +241,8 @@ md-card > div {
     word-break: normal;
     max-width: 450px;
 }
+
+md-tabs md-ink-bar {
+    color: #16444f;
+    background-color: #16444f;
+}

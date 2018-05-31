@@ -217,6 +217,13 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
         }
 
         /**
+         * Checks if wallet is view only
+         */
+        $rootScope.isViewOnlyWallet = function () {
+            return ($rootScope.getWallet().spend.sec === "0000000000000000000000000000000000000000000000000000000000000000");
+        }
+
+        /**
          * Event listener for state change start.
          */
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {

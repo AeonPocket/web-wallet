@@ -5,6 +5,9 @@ angular.module('aeonPocket').controller('registerCtrl', [
         $scope.step = 0;
         $scope.confirm = {};
         $scope.data = {};
+        $scope.viewWallet = {
+            viewOnly: true
+        };
 
         $scope.createNewWallet = function () {
             var seed = sc_reduce32(rand_32());
@@ -38,7 +41,7 @@ angular.module('aeonPocket').controller('registerCtrl', [
 
             userService.create(request).then(function(data) {
                 $mdToast.show($mdToast.simple('Account Created'));
-                $state.go('login');
+                $state.go('public.login');
             }, function (data) {
                 $mdToast.show($mdToast.simple(data.errors.address[0]));
             });
@@ -53,11 +56,23 @@ angular.module('aeonPocket').controller('registerCtrl', [
                 };
                 userService.create(request).then(function(data) {
                     $mdToast.showSimple("Account Created");
-                    $state.go('login');
+                    $state.go('public.login');
                 });
             } else {
                 $mdToast.show($mdToast.simple('Seed mismatch. Try again.'));
             }
+        }
+        
+        $scope.registerViewOnlyWallet = function () {
+            if ($scope.viewWalletForm.$invalid) {
+                $scope.viewWalletForm.$setSubmitted();
+                return;
+            }
+
+            userService.create($scope.viewWallet).then(function(data) {
+                $mdToast.showSimple("Account Created");
+                $state.go('public.login');
+            });
         }
     }
 ]);

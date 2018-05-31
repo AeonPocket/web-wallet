@@ -10,16 +10,18 @@ namespace App\DALs;
 
 
 use App\Models\Wallet;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class WalletDAL
 {
-    public static function createWallet(String $address, int $timestamp, int $bcHeight, String $transfers, String $keyImages) {
+    public static function createWallet(String $address, int $timestamp, int $bcHeight, String $transfers, String $keyImages, bool $viewOnly) {
         $wallet = new Wallet();
         $wallet->address = $address;
         $wallet->bcHeight = $bcHeight;
         $wallet->transfers = $transfers;
         $wallet->createTime = $timestamp;
         $wallet->keyImages = $keyImages;
+        $wallet->viewOnly = $viewOnly;
         $wallet->save();
     }
 
