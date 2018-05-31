@@ -24,7 +24,16 @@
                     {{wallet.address}}
                 </div>
             </div>
-            <br ng-if="!isViewOnlyWallet()" />
+            <br />
+            <div ng-if="isViewOnlyWallet()" layout="row">
+                <div>
+                    <i class="material-icons medium-icon">sync</i>
+                </div>
+                <div layout-align="start center">
+                    <label class="standalone">Sync Status</label><br/>
+                    {{wallet.syncHeight}} / {{wallet.blockHeight}}
+                </div>
+            </div>
             <div ng-if="!isViewOnlyWallet()" layout="row">
                 <div>
                     <i class="material-icons medium-icon">account_balance</i>
@@ -77,7 +86,7 @@
                     </div>
                     <div flex>
                         <p md-truncate style="font-weight: bold;">
-                            <a target="_blank" href="https://chainradar.com/aeon/transaction/{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}">{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}</a>
+                            <a target="_blank" href="https://aeonblocks.com/tx/{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}">{{transaction.tx_hash.substring(1, transaction.tx_hash.length -1)}}</a>
                         </p>
                         <p class="amount">{{transaction.amount.toFixed(12)}} <strong>AEON</strong></p>
                         <p>{{transaction.global_index}}</p>

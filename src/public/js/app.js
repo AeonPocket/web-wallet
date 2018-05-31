@@ -230,6 +230,22 @@ angular.module('aeonPocket', ['ui.router', 'ui.router.state.events', 'ngMaterial
             return $rootScope.getWallet().reset;
         }
 
+        $rootScope.openWarningDialog = function () {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .title('Understand the Risks in Using AeonPocket')
+                    .htmlContent('AeonPocket is a web-based interface that allows you to use Aeon without running a full Aeon node.' +
+                        'However, because this convenience comes at a cost: it is extremely difficult for AeonPocket to securely ' +
+                        'deliver its code to your browser. This means that there is considerable risk in using AeonPocket for ' +
+                        'large amounts!<br/>' +
+                        '<br/>' +
+                        'It is recommended that you treat AeonPocket as you would treat your actual wallet, ' +
+                        'and not store very large amounts in it. For long-term storage of Aeon you should create a cold ' +
+                        'wallet using <a href="https://moneroaddress.org/" target="_blank">MoneroAddress</a> or similar.')
+                    .ok('Got It')
+            )
+        }
+
         /**
          * Event listener for state change start.
          */

@@ -164,7 +164,7 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
 
             walletService.getTransactions(request).then(function(data) {
                 if (data.status === 'success') {
-                    $scope.transactions = data.transfers;
+                    $scope.transactions = data.transfers.reverse();
                 } else {
                     $scope.errorMessage = data.message;
                 }
