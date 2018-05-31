@@ -14,7 +14,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class WalletDAL
 {
-    public static function createWallet(String $address, int $timestamp, int $bcHeight, String $transfers, String $keyImages, bool $viewOnly) {
+    public static function createWallet(String $address, int $timestamp, int $bcHeight, String $transfers, String $keyImages, bool $viewOnly=null) {
         $wallet = new Wallet();
         $wallet->address = $address;
         $wallet->bcHeight = $bcHeight;
@@ -29,11 +29,14 @@ class WalletDAL
         return Wallet::where('address', $address)->first();
     }
 
-    public static function updateWallet(Wallet $wallet, int $bcHeight, String $transfers, String $keyImages, Array $unprocessedTx=[]){
+    public static function updateWallet(Wallet $wallet, int $bcHeight, String $transfers, String $keyImages,
+                                        Array $unprocessedTx=[], int $timeStamp=null, bool $reset=null){
        $wallet->setAttribute('bcHeight', $bcHeight);
        $wallet->setAttribute('transfers', $transfers);
        $wallet->setAttribute('keyImages', $keyImages);
        $wallet->setAttribute('unprocessedTxs', $unprocessedTx);
+       $wallet->setAttribute('createTime', $timeStamp ? $timeStamp : $wallet->createTime);
+       $wallet->setAttribute('reset', $reset ? $reset : $wallet->reset);
        $wallet->save();
     }
 

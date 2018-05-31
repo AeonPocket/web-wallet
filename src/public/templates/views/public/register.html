@@ -4,7 +4,7 @@
         AEON Pocket
     </h1>
     <md-card class="loginBox" ng-show="step==0" style="overflow-y: auto;">
-        <div layout-gt-sm="row" >
+        <div layout-gt-sm="row" style="padding: 0;">
             <div flex layout="row" ng-click="createNewWallet()">
                 <md-button ng-disabled="inProgress" flex class="hero-button md-raised">
                     <i class="material-icons large-icon">account_balance_wallet</i><br/>
@@ -18,7 +18,7 @@
                 </md-button>
             </div>
         </div>
-        <div layout-gt-sm="row">
+        <div layout-gt-sm="row" style="padding: 0;">
             <div flex layout="row">
                 <md-button ng-disabled="inProgress" flex class="hero-button md-raised" ng-click="step=3">
                     <i class="material-icons large-icon">visibility</i><br/>

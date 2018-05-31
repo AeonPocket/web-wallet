@@ -20,6 +20,7 @@ use App\Http\Objects\TransferDestination;
 use App\Http\Objects\TransferRequest;
 use App\Http\Objects\UpdateWalletRequest;
 use App\Utils\error;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -33,6 +34,7 @@ class WalletService
     const EMPTY_TRANSFER = "22 serialization::archive 16 0 0 0 0";
     const TRANSFER_TYPE_ALL = "all";
     const TRANSFER_FEE = 10000000000;
+    const RESET_HEIGHT = 900000;
     public function __construct() {
         $this->rpcService = new RPCService();
     }
@@ -100,6 +102,7 @@ class WalletService
         // Set session variables
         $request->session()->put('address', $address);
         $request->session()->put('viewOnly', $wallet->viewOnly);
+        $request->session()->put('reset', $wallet->reset);
     }
 
     public function getBalance(Request $request) {
@@ -376,5 +379,35 @@ class WalletService
         }
 
         return ['success' => true];
+    }
+
+    public function resetWallet(Request $request) {
+        $date = $request->input('date');
+        $startDate = Carbon::today()->subDays(91);
+        $today = Carbon::today();
+
+        $validator = Validator::make([
+            'date' => $date
+        ], [
+            'date' => 'required|date|after:' . $startDate . '|before:' . $today
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+
+        $wallet = WalletDAL::getWallet($request->session()->get('address'));
+
+        if (!$wallet->reset) {
+            WalletDAL::updateWallet(
+                $wallet, self::RESET_HEIGHT, self::EMPTY_TRANSFER,
+                self::EMPTY_TRANSFER, [], strtotime($date), true
+            );
+        } else {
+            throw error::getBadRequestException(error::WALLET_ALREADY_RESET);
+        }
+
+        return ['syncHeight' => self::RESET_HEIGHT];
     }
 }

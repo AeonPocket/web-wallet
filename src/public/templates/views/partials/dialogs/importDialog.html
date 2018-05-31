@@ -1,0 +1,26 @@
+<md-dialog>
+    <h3 style="padding-left: 10px;">Import Past Transaction</h3>
+    <form name="resetWalletForm" ng-submit="reset()">
+        <md-content style="padding: 10px;">
+            <p style="text-align: center;">
+                You can reset your wallet and import transfers done in last 90 days.<br />
+                If you need to import transfers before 90 days then DM us on reddit.
+            </p>
+                <md-input-container>
+                    <label>Date</label>
+                    <md-datepicker ng-model="data.date" name="date" required
+                                   md-min-date="boundary.minDate"
+                                   md-max-date="boundary.maxDate">
+                    </md-datepicker>
+                    <div class="validation-messages" ng-messages="resetWalletForm.date.$error">
+                        <div ng-message="required" ng-show="resetWalletForm.date.$error.required">Required</div>
+                    </div>
+                </md-input-container>
+        </md-content>
+        <div layout="row">
+            <div flex></div>
+            <md-button class="md-primary" ng-click="close()">Cancel</md-button>
+            <md-button type="submit" class="md-primary">Import</md-button>
+        </div>
+    </form>
+</md-dialog>

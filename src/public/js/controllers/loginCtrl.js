@@ -57,6 +57,7 @@ angular.module('aeonPocket').controller('loginCtrl', [
                     );
                 } else {
                     localStorage.setItem('address', data.address);
+                    wallet.reset = data.reset;
                     $scope.setWallet(wallet);
                     $state.go('wallet');
                 }
@@ -73,10 +74,13 @@ angular.module('aeonPocket').controller('loginCtrl', [
                 view: generate_keys($scope.viewWallet.viewKey),
                 spend: generate_keys("0000000000000000000000000000000000000000000000000000000000000000")
             }
+
+            wallet.spend.pub = decode_address($scope.viewWallet.address).spend;
             // Call Login API and redirect user / show appropriate error.
             userService.login($scope.viewWallet).then(function(data) {
                 if (data.viewOnly) {
                     localStorage.setItem('address', data.address);
+                    wallet.reset = data.reset;
                     $scope.setWallet(wallet);
                     $state.go('wallet');
                 } else {
@@ -92,7 +96,7 @@ angular.module('aeonPocket').controller('loginCtrl', [
                     );
                 }
             }, function (data) {
-                $scope.loginForm.seed.$setValidity('validation', false);
+                $scope.viewWalletForm.address.$setValidity('validation', false);
                 $scope.errorMessage = data.message;
             });
         }

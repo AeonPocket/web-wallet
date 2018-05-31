@@ -58,17 +58,18 @@
         </div>
     </md-card>
     <md-card flex>
-        <div class="header">
+        <div class="header" layout="row">
             <strong>Transactions</strong>
+            <div flex></div>
+            <a style="cursor: pointer;" ng-if="!isReset()" ng-click="openImportDialog()">Import Past Transactions</a>
         </div>
         <div flex layout="column" style="padding: 0;">
             <div ng-if="errorMessage" flex layout="column" layout-align="center center">
                 <p style="color: #555; text-transform: uppercase;">{{errorMessage}}</p>
+                <a style="cursor: pointer" ng-click="showTransactionHelp()">Where are my past transactions?</a>
             </div>
-            <div>
 
-            </div>
-            <md-virtual-repeat-container flex>
+            <md-virtual-repeat-container ng-if="!errorMessage" flex>
                 <div class="tx-list" ng-class="transaction.spent?'outgoing':'incoming'" md-item-size="76" md-virtual-repeat="transaction in transactions" layout="row">
                     <div>
                         <i class="material-icons tx-icon" ng-if="!transaction.spent">file_download</i>

@@ -60,4 +60,8 @@ class WalletController extends Controller
     public function deleteWallet(Request $request) {
         return response()->json($this->walletService->deleteWallet($request));
     }
+
+    public function resetWallet(Request $request) {
+        return response()->json($this->walletService->resetWallet($request));
+    }
 }

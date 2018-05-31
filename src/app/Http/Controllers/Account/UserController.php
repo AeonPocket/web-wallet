@@ -39,6 +39,7 @@ class UserController
         $res->success = true;
         $res->address = $request->session()->get('address');
         $res->viewOnly = $request->session()->get('viewOnly');
+        $res->reset = $request->session()->get('reset');
         return json_encode($res);
     }
 

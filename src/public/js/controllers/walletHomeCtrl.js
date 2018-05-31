@@ -91,6 +91,68 @@ angular.module('aeonPocket').controller('walletHomeCtrl', [
             });
         }
 
+        $scope.showTransactionHelp = function () {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .title("Past Transactions")
+                    .htmlContent("We sync wallet from the time it was created on our platform.<br/>" +
+                        "Hence, you will be able to view only your future transactions here.")
+                    .ok("Got it")
+            )
+        }
+
+        $scope.openImportDialog = function () {
+            $mdDialog.show({
+                templateUrl: 'templates/views/partials/dialogs/importDialog.html',
+                locals: {
+                    wallet: $scope.wallet,
+                    refresh: $scope.refresh,
+                    setWalletParam: $scope.setWalletParam
+                },
+                controller: [
+                    '$scope', '$mdDialog', '$mdToast', 'walletService', 'wallet', 'refresh', 'setWalletParam',
+                    function ($scope, $mdDialog, $mdToast, walletService, wallet, refresh, setWalletParam) {
+
+                        $scope.boundary = {};
+                        $scope.data = {};
+
+                        $scope.reset = function () {
+                            if ($scope.resetWalletForm.$invalid) {
+                                $scope.resetWalletForm.$setSubmitted();
+                                return;
+                            }
+
+                            walletService.resetWallet($scope.data).then(function (data) {
+                                setWalletParam('syncHeight', data.syncHeight);
+                                $mdDialog.hide();
+                                refresh();
+                            }, function (data) {
+                                $mdToast.show($mdToast.simple().textContent(data.message));
+                            })
+                        };
+
+                        $scope.close = function () {
+                            $mdDialog.cancel();
+                        };
+
+                        $scope.init = function () {
+                            var now = new Date();
+                            now.setHours(0);
+                            now.setMinutes(0);
+                            now.setSeconds(0);
+                            now.setMilliseconds(0);
+                            var minDate = new Date(now.getTime() - 90*24*60*60*1000);
+
+                            $scope.boundary.minDate = minDate;
+                            $scope.boundary.maxDate = now;
+                        };
+
+                        $scope.init();
+                    }
+                ]
+            })
+        }
+
         $scope.init = function () {
             $scope.errorMessage = null;
             $scope.hideSyncDialog();

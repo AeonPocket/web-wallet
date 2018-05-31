@@ -25,6 +25,7 @@ class error
     const CSRF_TOKEN_MISMATCH = "csrfTokenMismatch";
     const SESSION_EXPIRED = "sessionExpired";
     const REFRESH_LOCKED = "refreshLocked";
+    const WALLET_ALREADY_RESET = "walletAlreadyReset";
 
     /**
      * Contains all error code and description for each key.
@@ -42,6 +43,9 @@ class error
         self::CSRF_TOKEN_MISMATCH   => array("code" => 1102, "message" => "Invalid CSRF Token"),
         self::SESSION_EXPIRED       => array("code" => 1103, "message" => "Session Expired. Login again."),
         self::REFRESH_LOCKED        => array("code" => 1104, "message" => "Refresh Locked. Please try after 10 minutes"),
+
+        // Wallet erros
+        self::WALLET_ALREADY_RESET  => array("code" => 1200, "message" => "Wallet can be reset only once. Contact admins"),
 
         // These errors should never happen!
         // Its over 9000! :P
