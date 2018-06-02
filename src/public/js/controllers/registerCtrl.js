@@ -72,6 +72,9 @@ angular.module('aeonPocket').controller('registerCtrl', [
             userService.create($scope.viewWallet).then(function(data) {
                 $mdToast.showSimple("Account Created");
                 $state.go('public.login');
+            }, function (data) {
+                $scope.viewWalletForm.address.$setValidity('validation', false);
+                $scope.errorMessage = data.message;
             });
         }
     }

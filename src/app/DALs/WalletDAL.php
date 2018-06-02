@@ -42,10 +42,10 @@ class WalletDAL
 
     public static function getWallet(String $address) {
         $wallet = Wallet::where('address', $address)->first();
-        if ($wallet->transfers[0] == 'W') {
+        if ($wallet && $wallet->transfers[0] == 'W') {
             $wallet->transfers = self::getFile($wallet->transfers);
         }
-        if ($wallet->keyImages[0] == 'W') {
+        if ($wallet && $wallet->keyImages[0] == 'W') {
             $wallet->keyImages = self::getFile($wallet->keyImages);
         }
         Log::debug($wallet);

@@ -26,6 +26,7 @@ class error
     const SESSION_EXPIRED = "sessionExpired";
     const REFRESH_LOCKED = "refreshLocked";
     const WALLET_ALREADY_RESET = "walletAlreadyReset";
+    const WALLET_KEY_MISMATCH = "walletKeyMismatch";
 
     /**
      * Contains all error code and description for each key.
@@ -46,6 +47,7 @@ class error
 
         // Wallet erros
         self::WALLET_ALREADY_RESET  => array("code" => 1200, "message" => "Wallet can be reset only once. Contact admins"),
+        self::WALLET_KEY_MISMATCH   => array("code" => 1201, "message" => "Provided key didn't match the address."),
 
         // These errors should never happen!
         // Its over 9000! :P

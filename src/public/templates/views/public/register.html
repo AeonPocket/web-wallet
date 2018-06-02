@@ -82,13 +82,14 @@
     </md-card>
 
     <md-card class="loginBox" ng-show="step==3" style="overflow-y: auto;">
-        <form name="viewWalletForm" layout="column" ng-submit="registerViewOnlyWallet()">
+        <form name="viewWalletForm" layout="column" ng-submit="registerViewOnlyWallet()" autocomplete="off">
             <div layout="column">
                 <md-input-container>
                     <label>Your Wallet Address</label>
                     <input ng-disabled="inProgress" required name="address" ng-model="viewWallet.address" />
                     <div class="validation-messages" ng-messages="viewWalletForm.address.$error">
                         <div ng-message="required" ng-show="viewWalletForm.address.$error.required">Required</div>
+                        <div ng-message="validation" ng-show="viewWalletForm.address.$error.validation">{{errorMessage}}</div>
                     </div>
                 </md-input-container>
                 <md-input-container>

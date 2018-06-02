@@ -96,6 +96,12 @@ class WalletService
             throw error::getBadRequestException(error::WALLET_NOT_FOUND);
         }
 
+        // Check if wallet address matches the key
+        $this->rpcService->setWallet(new SetWalletRequest(
+            $address, $viewKey, $wallet->createTime, $wallet->bcHeight,
+            $wallet->transfers, $wallet->keyImages
+        ));
+
         // Generate a new session.
         $request->session()->regenerate();
 
