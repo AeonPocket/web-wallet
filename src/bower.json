@@ -20,5 +20,8 @@
     "angular-loading-bar": "0.9.0",
     "angular-qrcode": "7.2.0",
     "angular-sanitize": "1.6.8"
+  },
+  "resolutions": {
+    "angular": "1.6.8"
   }
 }
