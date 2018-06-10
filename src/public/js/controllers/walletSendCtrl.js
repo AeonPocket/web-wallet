@@ -171,6 +171,9 @@ angular.module('aeonPocket').controller('walletSendCtrl', [
             $scope.send.viewKey = $scope.getWallet().view.sec;
             $scope.send.fee = 0;
 
+            $scope.fees = 10000000000;
+            $scope.try = 0;
+
             $scope.calculateFee();
         }
     }
