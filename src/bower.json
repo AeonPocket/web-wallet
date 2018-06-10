@@ -15,10 +15,10 @@
     "tests"
   ],
   "dependencies": {
-    "angular-material": "^1.1.5",
-    "angular-ui-router": "^1.0.11",
-    "angular-loading-bar": "^0.9.0",
-    "angular-qrcode": "^7.2.0",
-    "angular-sanitize": "^1.6.8"
+    "angular-material": "1.1.5",
+    "angular-ui-router": "1.0.11",
+    "angular-loading-bar": "0.9.0",
+    "angular-qrcode": "7.2.0",
+    "angular-sanitize": "1.6.8"
   }
 }
