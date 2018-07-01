@@ -29,6 +29,14 @@ Route::group(['middleware' => 'web', 'prefix' => 'v1'], function(){
         });
     });
 
+    // Path: /admin
+    Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
+
+        Route::group(['middleware' => ['admin']], function () {
+            Route::post('reset', 'AdminController@reset');
+        });
+    });
+
     // Path: /wallet
     Route::group(['prefix' => 'wallet', 'namespace'=>'Wallet'], function(){
         Route::group(['middleware' => ['authentication']], function (){

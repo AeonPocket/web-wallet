@@ -4,7 +4,7 @@ services:
   aeon-docker:
     image: aeonpocket/rpc
     environment:
-      - DAEMON_HOST=192.168.2.110
+      - DAEMON_HOST=192.168.0.108
       - DAEMON_PORT=11181
 
   redis:
@@ -31,6 +31,7 @@ services:
       - APP_URL=https://localhost
       - APP_KEY=base64:qsVQ0YUyXhzMGqW6fE6BRg6u2uIqCACdoj5tsKbVW58=
       - APP_KEY_FILE=/dev/null
+      - APP_ADMIN_TOKEN=AEON_POCKET_ADMIN
       - APP_LOG=errorlog
       - APP_RPC_URL=http://aeon-docker:11191/json_rpc
       - DB_CONNECTION=mongodb

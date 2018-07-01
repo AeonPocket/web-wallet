@@ -11,7 +11,6 @@ namespace App\Http\Controllers\Account;
 use \stdClass;
 use App\Services\RPCService;
 use App\Services\WalletService;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 
 class UserController
