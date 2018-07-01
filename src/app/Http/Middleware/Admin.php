@@ -22,7 +22,7 @@ class Admin
     {
         $token = $request->header('X-ADMIN-TOKEN');
         Log::debug($token);
-        if ($token == env('APP_ADMIN_TOKEN', null))
+        if ($token == env('APP_ADMIN_TOKEN', trim(file_get_contents(env('APP_ADMIN_TOKEN_FILE')))))
             return $next($request);
         else
             throw error::getAuthorizationException(error::FORBIDDEN);

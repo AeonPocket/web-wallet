@@ -51,9 +51,11 @@ services:
       - mongo_user
       - mongo_pw
       - app_key
+      - admin_token
     environment:
       - APP_URL=https://localhost
       - APP_KEY_FILE=/run/secrets/app_key
+      - APP_ADMIN_TOKEN=/run/secrets/admin_token
       - APP_LOG=errorlog
       - APP_RPC_URL=http://aeon-docker:11191/json_rpc
       - DB_CONNECTION=mongodb
@@ -85,4 +87,6 @@ secrets:
   mongo_pw:
     external: true
   app_key:
+    external: true
+  admin_token:
     external: true

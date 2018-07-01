@@ -32,6 +32,7 @@ services:
       - APP_KEY=base64:qsVQ0YUyXhzMGqW6fE6BRg6u2uIqCACdoj5tsKbVW58=
       - APP_KEY_FILE=/dev/null
       - APP_ADMIN_TOKEN=AEON_POCKET_ADMIN
+      - APP_ADMIN_TOKEN_FILE=/dev/null
       - APP_LOG=errorlog
       - APP_RPC_URL=http://aeon-docker:11191/json_rpc
       - DB_CONNECTION=mongodb
